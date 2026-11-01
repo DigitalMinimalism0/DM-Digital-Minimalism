@@ -22,6 +22,9 @@ jobs:
       - run: pnpm test
       - run: pnpm build
       - run: pnpm exec playwright-core install --with-deps chromium
+      - run: node scripts/test-portal.mjs
+        env:
+          E2E_BROWSER: chromium
       - run: pnpm test:e2e
         env:
           E2E_BROWSER: chromium
@@ -30,4 +33,6 @@ jobs:
         if: always()
         with:
           name: browser-evidence
-          path: .e2e/dm/*.png
+          path: |
+            .e2e/dm/*.png
+            .e2e/portal/*.png

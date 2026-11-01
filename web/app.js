@@ -20,6 +20,7 @@ import {
   describeError,
 } from '../core/offline.js';
 import { cfg, dep } from './site-config.js';
+import { initPortal } from './portal.js';
 const $ = (id) => document.getElementById(id);
 $('action-form').noValidate = true;
 const chain = {
@@ -94,10 +95,11 @@ if (adminPage) {
     $('transaction-status'),
     $('transaction-link'),
   );
-  document.title = 'DM · Administration';
+  document.title = 'digital minimalism · Administration';
   for (const a of document.querySelectorAll('header nav a[href^="#"]'))
     a.href = '/' + a.getAttribute('href');
 }
+initPortal({ admin: adminPage });
 for (const a of document.querySelectorAll('[data-github]')) a.href = cfg.links.github;
 if (cfg.links.twitter)
   for (const a of document.querySelectorAll('[data-twitter]')) {
@@ -145,7 +147,7 @@ function openWallets() {
   }
   if (address) {
     const button = document.createElement('button');
-    button.textContent = 'Disconnect from DM';
+    button.textContent = 'Disconnect wallet';
     button.onclick = () => {
       disconnect();
       $('wallet-dialog').close();

@@ -6,7 +6,7 @@
   "weth": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
   "totalSupply": "1000000000000000000000000000",
   "decimals": 18,
-  "brand": { "name": "DM", "title": "Digital Minimalism", "symbol": "DM" },
+  "brand": { "name": "digital minimalism", "title": "digital minimalism", "symbol": "DM" },
   "stockereum": {
     "factory": "0xc6B080DEd03C3382476A76345e79f82BD480977B",
     "hook": "0x322dcEc4958C14e021A9F1cD49DF11b9457968cC",

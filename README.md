@@ -1,6 +1,6 @@
-# DM · Digital Minimalism
+# digital minimalism
 
-![DM. Your time is your own.](docs/assets/cover.svg)
+![digital minimalism. Your time is your own.](docs/assets/cover.svg)
 
 <p align="center">
   <a href="https://github.com/DigitalMinimalism0/DM-Digital-Minimalism/actions/workflows/ci.yml"><img alt="Build and tests" src="https://github.com/DigitalMinimalism0/DM-Digital-Minimalism/actions/workflows/ci.yml/badge.svg"></a>
@@ -10,11 +10,11 @@
 
 **Let your tokens rest. Keep your time.**
 
-DM is an independent experiment in digital minimalism. Set aside some tokens, share ETH that is actually funded, and return whenever you choose. No fixed term. No exit fee. No check-ins.
+digital minimalism is an independent experiment in digital minimalism. Set aside some tokens, share ETH that is actually funded, and return whenever you choose. No fixed term. No exit fee. No check-ins.
 
 Inspired by [Vitalik Buterin’s _Digital minimalism_](https://vitalik.eth.limo/general/2026/10/31/digital_minimalism.html). Independent; not affiliated with or endorsed by Vitalik Buterin or Stockereum.
 
-![DM website, captured from the local browser rehearsal](docs/assets/website.png)
+![digital minimalism website, captured from the local browser rehearsal](docs/assets/website.png)
 
 ## One small mechanism
 
@@ -40,9 +40,9 @@ flowchart LR
 
 ## An interface you can put down
 
-A monochrome website with ordinary forms: deposit, withdraw, collect. Exact-amount approvals, transaction review, a consistent-block rewards leaderboard, funding records and an administrator launch panel. No terminal or end-user CLI. Fonts, image and scripts are served locally; no analytics or tracking cookies.
+A native scroll entrance expands the original ocean photograph. It opens directly into one integrated participation surface with ordinary forms: deposit, withdraw, collect. Exact-amount approvals, transaction review, a consistent-block rewards leaderboard, funding records and an administrator launch panel. No terminal or end-user CLI. Fonts, image and scripts are served locally; no analytics or tracking cookies.
 
-The logo is a provisional typographic mark while final brand assets are prepared. The code builds into an honest pre-launch state until a new deployment manifest is published. No legacy deployment is connected.
+The project name is **digital minimalism** (lowercase); its token is **DM** (uppercase). The logo is a provisional typographic mark while final brand assets are prepared. The code builds into an honest pre-launch state until a new deployment manifest is published. No legacy deployment is connected.
 
 ## Run locally
 

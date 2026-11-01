@@ -31,3 +31,7 @@ A fork-only impersonation installs a local price signer because the real launch 
 ## Limits
 
 The suite tests implemented rules; it does not certify profitability, future platform behavior, external audits, wallet-extension internals, unrestricted RPC availability or mainnet deployment completion. Final artwork and social account are separate from functional verification. Public source and tests are evidence of implementation, not a guarantee.
+
+## Scroll entrance and integrated interface
+
+`pnpm test:portal` verifies the small-image starting bounds, enlargement at half scroll, full-viewport arrival directly in participation, reverse scroll, unchanged form nodes and drafts across navigation, deep links, 390px/320px layouts, reduced motion, browser Back and the fallback without ScrollTimeline. It asserts that no halftone canvas is rendered. Screenshots are saved in `.e2e/portal/`. The economic browser rehearsal also switches views while a transaction review is open and confirms it survives.

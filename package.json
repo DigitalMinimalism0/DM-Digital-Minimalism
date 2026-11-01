@@ -1,5 +1,5 @@
 {
-  "name": "dm-digital-minimalism",
+  "name": "digital-minimalism",
   "version": "2.0.0",
   "private": true,
   "description": "DM: flexible deposits and token-seconds-weighted ETH rewards. Your time is your own.",
@@ -21,6 +21,7 @@
     "test:fork": "forge test --match-path contracts/test/fork/* -vv",
     "test:js": "node --test test/*.test.mjs",
     "test:e2e": "node scripts/e2e.mjs",
+    "test:portal": "pnpm build && node scripts/test-portal.mjs",
     "preflight:mainnet": "node scripts/preflight.mjs",
     "deploy:mainnet": "node scripts/deploy.mjs",
     "verify:deployment": "node scripts/verify-deployment.mjs",

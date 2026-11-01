@@ -151,7 +151,7 @@ try {
   );
   assert.equal(await page.locator('#submit-action').isDisabled(), true);
   await page.goto(origin + '/admin');
-  await page.locator('[data-connect]').click();
+  await page.locator('[data-connect]:visible').click();
   await page.getByRole('button', { name: 'MetaMask', exact: true }).click();
   await page.evaluate((a) => window.testSelect(a), admin);
   await page.waitForFunction(() => !document.getElementById('admin-controls').hidden);
@@ -162,7 +162,7 @@ try {
     document.getElementById('binding-status').textContent.includes('Connected permanently'),
   );
   await page.goto(origin + '/#participate');
-  await page.locator('[data-connect]').click();
+  await page.locator('[data-connect]:visible').click();
   await page.getByRole('button', { name: 'MetaMask', exact: true }).click();
   await page.waitForFunction(() =>
     document.getElementById('available').textContent.includes('1,000'),
@@ -178,7 +178,7 @@ try {
   await write(weth, mocks('MockWeth').abi, 'transfer', [escrow, parseEther('1')]);
   await write(escrow, mocks('MockEscrow').abi, 'credit', [admin, weth, parseEther('1')]);
   await page.goto(origin + '/admin');
-  await page.locator('[data-connect]').click();
+  await page.locator('[data-connect]:visible').click();
   await page.getByRole('button', { name: 'MetaMask', exact: true }).click();
   await page.evaluate((a) => window.testSelect(a), admin);
   await page.waitForFunction(
@@ -210,20 +210,28 @@ try {
   );
   console.log('PASS creator fee claim, WETH unwrap and ETH funding through administrator UI');
   await page.goto(origin + '/#participate');
-  await page.locator('[data-connect]').click();
+  await page.locator('[data-connect]:visible').click();
   await page.getByRole('button', { name: 'MetaMask', exact: true }).click();
   await page.waitForFunction(
     () =>
       document.getElementById('my-reward').textContent !== '—' &&
       document.getElementById('my-reward').textContent !== '0',
   );
+  await page.locator('.world-nav [data-view="rewards"]').click();
   await page.locator('#refresh-leaderboard').click();
   await page.waitForSelector('#leaderboard-rows tr');
   assert.equal(await page.locator('#leaderboard-rows tr').count(), 1);
   assert.match(await page.locator('#my-rank').textContent(), /1 of 1/);
-  await page.locator('#participate').screenshot({ path: join(dir, 'participation.png') });
-  await page.locator('#home').screenshot({ path: join(dir, 'hero.png') });
-  await page.screenshot({ path: join(dir, 'desktop.png'), fullPage: true });
+  await page.locator('.world-nav [data-view="offline"]').click();
+  await page.screenshot({ path: join(dir, 'participation.png') });
+  await page.locator('#world-brand').click();
+  await page.waitForFunction(
+    () => !document.getElementById('world').classList.contains('is-ready'),
+  );
+  await page.screenshot({ path: join(dir, 'hero.png') });
+  await page.locator('.identity').click();
+  await page.waitForSelector('#world[data-view="offline"]');
+  await page.screenshot({ path: join(dir, 'desktop.png') });
   console.log('PASS deposit, weighted funding and leaderboard');
   const before = await publicClient.readContract({
     address: offline,
@@ -246,6 +254,9 @@ try {
   await page.locator('#tab-withdraw').click();
   await page.locator('#max-amount').click();
   await page.locator('#submit-action').click();
+  await page.locator('.world-nav [data-view="rewards"]').click();
+  await page.locator('.world-nav [data-view="offline"]').click();
+  assert.equal(await page.locator('#transaction-review').isVisible(), true);
   await page.locator('#confirm-transaction').click();
   await page.waitForFunction(() => document.getElementById('my-deposited').textContent === '0');
   assert.equal(
@@ -267,7 +278,9 @@ try {
   await page.waitForFunction(() =>
     document.getElementById('protocol-state').textContent.includes('Offline is open'),
   );
-  await page.screenshot({ path: join(dir, 'mobile.png'), fullPage: true });
+  await page.locator('.identity').click();
+  await page.waitForSelector('#world[data-view="offline"]');
+  await page.screenshot({ path: join(dir, 'mobile.png') });
   assert.ok(
     await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
     'No horizontal page overflow',

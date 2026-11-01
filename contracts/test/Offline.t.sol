@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.28;
+pragma solidity 0.8.38;
 
 import {Test} from "forge-std/Test.sol";
 import {StdInvariant} from "forge-std/StdInvariant.sol";
@@ -28,13 +28,13 @@ contract MockToken {
         return true;
     }
 
-    function transfer(address to, uint256 amount) external returns (bool) {
+    function transfer(address to, uint256 amount) public virtual returns (bool) {
         balanceOf[msg.sender] -= amount;
         balanceOf[to] += amount;
         return true;
     }
 
-    function transferFrom(address from, address to, uint256 amount) external returns (bool) {
+    function transferFrom(address from, address to, uint256 amount) public virtual returns (bool) {
         allowance[from][msg.sender] -= amount;
         balanceOf[from] -= amount;
         balanceOf[to] += amount;
@@ -99,7 +99,7 @@ contract RejectEther {
     }
 }
 
-contract OfflineTest is Test {
+abstract contract OfflineFixture is Test {
     Offline internal off;
     MockToken internal token;
     MockHook internal hook;
@@ -107,7 +107,7 @@ contract OfflineTest is Test {
     address internal alice = address(0xA11CE);
     address internal bob = address(0xB0B);
 
-    function setUp() public {
+    function setUp() public virtual {
         vm.warp(100 days);
         hook = new MockHook();
         weth = new MockWeth();
@@ -133,6 +133,10 @@ contract OfflineTest is Test {
         (,, n,,) = off.account(user);
     }
 
+    receive() external payable {}
+}
+
+contract OfflineTest is OfflineFixture {
     function testQuantityAndTimeWeighted() public {
         deposit(alice, 100e18);
         vm.warp(block.timestamp + 1 days);
@@ -290,7 +294,6 @@ contract OfflineTest is Test {
         assertEq(off.totalDeposited(), 0);
         assertEq(off.totalTokenSeconds(), 0);
     }
-    receive() external payable {}
 }
 
 contract Handler is Test {

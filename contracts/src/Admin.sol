@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.28;
+pragma solidity 0.8.38;
 
 /// @notice Two-step admin with guarded renounce. The admin role only gates switches defined by the inheriting
 ///         contract; it never controls funds.

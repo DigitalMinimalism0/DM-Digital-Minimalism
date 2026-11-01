@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.28;
+pragma solidity 0.8.38;
 import {Test} from "forge-std/Test.sol";
 import {Offline} from "../../src/Offline.sol";
 import {PoolKey, LaunchParams, IFactory, IRouter, IEscrow, ILaunchToken, Stockereum} from "../utils/Stockereum.sol";

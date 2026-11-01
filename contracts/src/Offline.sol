@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.28;
+pragma solidity 0.8.38;
 
 import {Admin} from "./Admin.sol";
 import {IERC20, SafeToken} from "./SafeToken.sol";

@@ -2,6 +2,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { createPublicClient, http, parseAbi, isAddress, formatEther } from 'viem';
 import { offlineAbi, ZERO } from '../core/offline.js';
+import { assertCreation, assertRuntimeMatches } from './deployment-safety.mjs';
 export const root = resolve(import.meta.dirname, '..');
 export const loadJson = (file) => JSON.parse(readFileSync(file, 'utf8').replace(/^\uFEFF/, ''));
 export const cfg = loadJson(process.env.DM_CONFIG ?? join(root, 'config.json'));
@@ -80,7 +81,19 @@ export async function checks({ deployment = false, requireSigner = false } = {})
       if (existsSync(file)) {
         const dep = loadJson(file);
         report(dep.protocol === 'dm-offline-v1', 'new protocol manifest');
-        report(!!(await client.getCode({ address: dep.offline })), 'Offline deployed code');
+        report(
+          dep.chainId === cfg.chainId && dep.admin?.toLowerCase() === cfg.admin.toLowerCase(),
+          'manifest chain and original creator',
+        );
+        const artifact = loadJson(join(root, 'out/Offline.sol/Offline.json'));
+        const receipt = await client.getTransactionReceipt({ hash: dep.deploymentTx });
+        const tx = await client.getTransaction({ hash: dep.deploymentTx });
+        assertCreation(tx, receipt, cfg, artifact, dep.offline);
+        assertRuntimeMatches(await client.getCode({ address: dep.offline }), artifact);
+        report(
+          true,
+          'creation transaction, constructor arguments and runtime match the local build',
+        );
         for (const [f, expected] of [
           ['expectedCreator', cfg.admin],
           ['stockereumHook', cfg.stockereum.hook],

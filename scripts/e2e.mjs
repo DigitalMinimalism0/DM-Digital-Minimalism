@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import { createPublicClient, createWalletClient, http, parseEther, parseAbi } from 'viem';
 import { chromium } from 'playwright-core';
 import { offlineAbi } from '../core/offline.js';
+import { assertCreation, assertRuntimeMatches } from './deployment-safety.mjs';
 const root = resolve(import.meta.dirname, '..'),
   dir = join(root, '.e2e', 'dm');
 mkdirSync(dir, { recursive: true });
@@ -73,6 +74,20 @@ try {
     weth = await deploy(mocks('MockWeth'));
   const escrow = await deploy(mocks('MockEscrow'));
   const offline = await deploy(artifact('Offline'), [hook, weth, admin]);
+  assertRuntimeMatches(await publicClient.getCode({ address: offline }), artifact('Offline'));
+  // Exercise release identity checks against a real, mined local CREATE transaction.
+  const creationBlock = await publicClient.getBlock({
+    blockTag: 'latest',
+    includeTransactions: true,
+  });
+  const creation = creationBlock.transactions.find((tx) => tx.to === null);
+  const creationReceipt = await publicClient.getTransactionReceipt({ hash: creation.hash });
+  assertCreation(
+    creation,
+    creationReceipt,
+    { chainId: 31337, admin, stockereum: { hook }, weth },
+    artifact('Offline'),
+  );
   const factory = await publicClient.readContract({
     address: hook,
     abi: mocks('MockHook').abi,

@@ -4,6 +4,12 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { root, cfg, depDir, rpc, client, loadJson, checks } from './checks.mjs';
+import {
+  acquireDeploymentLock,
+  releaseDeploymentLock,
+  assertCreation,
+  assertRuntimeMatches,
+} from './deployment-safety.mjs';
 const fail = (message) => {
   console.error(message);
   process.exit(1);
@@ -38,6 +44,17 @@ if (addr.status !== 0 || addresses.at(-1)?.toLowerCase() !== cfg.admin.toLowerCa
 run('forge', ['build', '--sizes']);
 mkdirSync(depDir, { recursive: true });
 const staging = join(depDir, '.pending-' + randomUUID());
+try {
+  acquireDeploymentLock(depDir, {
+    protocol: 'dm-offline-v1',
+    chainId: cfg.chainId,
+    creator: cfg.admin,
+    staging,
+    startedAt: new Date().toISOString(),
+  });
+} catch (error) {
+  fail(error.message);
+}
 mkdirSync(staging);
 const env = {
   ...process.env,
@@ -67,11 +84,29 @@ run(
   env,
 );
 const dep = loadJson(join(staging, `${cfg.chainId}.json`));
-if (!(await client.getCode({ address: dep.offline })))
-  fail('No confirmed code. Manifest remains staged.');
+try {
+  const artifact = loadJson(join(root, 'out/Offline.sol/Offline.json'));
+  const log = loadJson(
+    join(root, 'broadcast/Deploy.s.sol', String(cfg.chainId), 'run-latest.json'),
+  );
+  const mined = log.receipts.find(
+    (r) => r.contractAddress?.toLowerCase() === dep.offline.toLowerCase(),
+  );
+  if (!mined) throw new Error('No matching deployment receipt.');
+  const receipt = await client.getTransactionReceipt({ hash: mined.transactionHash });
+  const tx = await client.getTransaction({ hash: mined.transactionHash });
+  assertCreation(tx, receipt, cfg, artifact, dep.offline);
+  assertRuntimeMatches(await client.getCode({ address: dep.offline }), artifact);
+  dep.deploymentTx = mined.transactionHash;
+} catch {
+  fail(
+    'Deployment identity verification failed. Manifest remains staged and locked. Inspect before retrying.',
+  );
+}
 writeFileSync(file, JSON.stringify(dep, null, 2) + '\n', { flag: 'wx' });
 if (await checks({ deployment: true }))
   fail('Deployed, but post-deployment checks failed. Do not redeploy blindly.');
+releaseDeploymentLock(depDir);
 console.log(
   'Next: commit the deployment manifest, rebuild/publish the website, verify /admin, then launch the token LAST.',
 );

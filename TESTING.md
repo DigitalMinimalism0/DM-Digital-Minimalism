@@ -8,6 +8,10 @@ The invariant handler uses three accounts and random deposits, partial withdrawa
 
 `test:js` checks the public ABI selectors against the compiled Solidity artifact, reward ranking, error explanations and public/credential-shaped URL handling.
 
+`Adversarial.t.sol` adds ETH and token callback attacks, rollback of taxed/mismatched deposits, two-step admin transfer/cancellation/renunciation, invalid binding settings, WETH rollback, forced ETH/token donations, ERC-20 return variants and full-supply/200-year arithmetic boundaries. `ReferenceModel.t.sol` explicitly ages seven accounts and allocates every funding with an O(users × events) oracle, comparing 1,000 × 96 random events with the cumulative-index implementation and fully unwinding each sequence. `DeployScript.t.sol` rejects non-mainnet execution before broadcast.
+
+Invariant runs now fail on an unexpected handler revert. The CI profile uses 5,000 conservation fuzz cases and 512 × 150 invariant calls. Deployment JavaScript tests cover atomic locks, interrupted attempts, runtime identity and creation-transaction validation; the browser rehearsal also validates identity against a mined local CREATE transaction. See [the release review](docs/REVIEW-2026-11-01.md) for exact results and scanner triage.
+
 ## Browser rehearsal
 
 `pnpm test:e2e` starts its own local Anvil (port 18555), deploys mock platform contracts plus the actual Offline contract, builds an isolated site under `.e2e/dm`, and starts a local server (port 4185). It uses an injected fixture backed only by unlocked local test accounts.
@@ -30,7 +34,7 @@ A fork-only impersonation installs a local price signer because the real launch 
 
 `pnpm preflight:mainnet` verifies chain, configured creator, code presence, Factory/Hook/Escrow relationships, WETH quote identity, 3% fee split and tick spacing. `--signer` additionally requires local signer selection and verification credentials. No key contents are read or printed.
 
-`pnpm verify:deployment` checks the published deployment on-chain. Explorer source verification is requested by deployment and should also be inspected on Etherscan before launch.
+`pnpm verify:deployment` checks the published deployment on-chain, including its creation transaction, constructor arguments and runtime against `out/Offline.sol/Offline.json`; run `forge build` first. Explorer source verification is requested by deployment and should also be inspected on Etherscan before launch. `pnpm recover:deployment -- 0xTRANSACTION_HASH` can restore an interrupted successful deployment without sending another transaction.
 
 ## Limits
 
@@ -38,4 +42,4 @@ The suite tests implemented rules; it does not certify profitability, future pla
 
 ## Scroll entrance and integrated interface
 
-`pnpm test:portal` verifies the small-image starting bounds, enlargement at half scroll, full-viewport arrival directly in participation, reverse scroll, unchanged form nodes and drafts across navigation, deep links, 390px/320px layouts, reduced motion, browser Back and the fallback without ScrollTimeline. It asserts that no halftone canvas is rendered. Screenshots are saved in `.e2e/portal/`. The economic browser rehearsal also switches views while a transaction review is open and confirms it survives.
+`pnpm test:portal` verifies the small-image starting bounds, enlargement at half scroll, full-viewport arrival directly in participation, reverse scroll, unchanged form nodes and drafts across navigation, deep links, 390px/320px layouts, reduced motion, browser Back and the fallback without ScrollTimeline. It checks the photographic halftone renderer and opaque reading surface. Screenshots are saved in `.e2e/portal/`. The economic browser rehearsal also switches views while a transaction review is open and confirms it survives.

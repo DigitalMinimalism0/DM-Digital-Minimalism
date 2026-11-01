@@ -2,6 +2,8 @@
 
 DM is an immutable, non-proxy companion contract. Source availability and tests do not imply an independent audit.
 
+The [2026-11-01 internal pre-deployment review](docs/REVIEW-2026-11-01.md) records the reviewed scope, fixes, adversarial/reference tests and all 14 Slither diagnostics. It is an internal engineering review, not a third-party certification.
+
 ## Administrator powers
 
 - Bind one Stockereum token after launch; binding is permanent and validated against the configured official Hook.

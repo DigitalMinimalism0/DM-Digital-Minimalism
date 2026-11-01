@@ -24,6 +24,7 @@
     "test:portal": "pnpm build && node scripts/test-portal.mjs",
     "preflight:mainnet": "node scripts/preflight.mjs",
     "deploy:mainnet": "node scripts/deploy.mjs",
+    "recover:deployment": "node scripts/recover-deployment.mjs",
     "verify:deployment": "node scripts/verify-deployment.mjs",
     "audit:source": "node scripts/audit-source.mjs",
     "format": "prettier --write web core scripts test docs *.md *.json .github/workflows/*.yml",

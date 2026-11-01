@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.28;
+pragma solidity 0.8.38;
 
 /// @notice Minimal interfaces to the real, deployed Stockereum v3 contracts (verified source on Sourcify).
 

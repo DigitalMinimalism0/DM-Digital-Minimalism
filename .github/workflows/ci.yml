@@ -20,6 +20,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: forge build --sizes
       - run: pnpm test
+        env:
+          FOUNDRY_PROFILE: ci
       - run: pnpm build
       - run: pnpm exec playwright-core install --with-deps chromium
       - run: node scripts/test-portal.mjs

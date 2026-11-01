@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.28;
+pragma solidity 0.8.38;
 import {Script, console2} from "forge-std/Script.sol";
 import {Offline} from "../src/Offline.sol";
 
@@ -9,6 +9,7 @@ contract Deploy is Script {
         address creator = vm.parseJsonAddress(json, ".admin");
         address hook = vm.parseJsonAddress(json, ".stockereum.hook");
         address weth = vm.parseJsonAddress(json, ".weth");
+        require(block.chainid == 1 && vm.parseJsonUint(json, ".chainId") == 1, "Ethereum mainnet only");
         require(vm.parseJsonAddress(json, ".token") == address(0), "launch last; token must be zero");
         uint256 startBlock = block.number;
         vm.startBroadcast();

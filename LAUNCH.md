@@ -6,6 +6,8 @@
 
 ## 1. 安装与验收
 
+本次部署使用 Solidity **0.8.38**。先阅读 [部署前安全复核记录](docs/REVIEW-2026-11-01.md)，不要混用旧编译产物。
+
 ```powershell
 pnpm install --frozen-lockfile
 forge build
@@ -58,6 +60,16 @@ pnpm deploy:mainnet
 
 Forge 模拟地址写入忽略的 `deployments/.pending-*`，只有广播成功且链上有代码后才写入 `deployments/1.json`。有现存部署文件时拒绝重复部署。任何广播阶段报错，都先检查 `broadcast/` 和 staging，不要直接重新执行。
 
+脚本在广播前创建原子锁 `deployments/.pending-offline-lock/`。失败时保留锁，阻止另一个终端或重试意外再部署。成功后还会核对链上创建交易、部署者、构造参数与完整运行时代码，再发布 manifest 和释放锁。
+
+若交易已成功，但浏览器验证或后续步骤失败，先 `forge build`，再用实际交易哈希恢复原地址：
+
+```powershell
+pnpm recover:deployment -- 0x你的部署交易哈希
+```
+
+恢复命令只读取链上数据并写回公开 manifest，不签名、不重部署；只接受当前编译产物、配置和部署者完全匹配的创建交易。恢复不会替代 Etherscan 源码验证。若此前根本未广播，核对链上 nonce、交易和 staging 后再处理锁；不能通过删锁直接跳过调查。
+
 ```powershell
 pnpm verify:deployment
 ```
@@ -79,7 +91,7 @@ vercel --prod
 
 使用原始创作者钱包 `0x4fc6e37d6aefb348cff3791f493ce49754af905a`，设置：
 
-- 项目品牌 DM / Digital Minimalism，符号与 `brand.symbol` 一致。
+- 项目名 `digital minimalism`，代币符号 `DM`，与 `brand` 配置一致。
 - ETH 交易对。
 - 正常交易费 3%。
 - **Holder Rewards OFF**，创作者自行领取手续费。

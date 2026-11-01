@@ -4,7 +4,7 @@ test = "contracts/test"
 script = "contracts/script"
 out = "out"
 libs = ["lib"]
-solc = "0.8.28"
+solc = "0.8.38"
 evm_version = "cancun"
 optimizer = true
 optimizer_runs = 10000
@@ -17,7 +17,7 @@ fs_permissions = [
 ]
 
 [lint]
-# Lock expiry and reward streaming are inherently time based; a few seconds of validator skew is harmless here.
+# Token-seconds use Ethereum block time; they do not measure real-world offline activity.
 exclude_lints = ["block-timestamp"]
 
 [fuzz]
@@ -26,7 +26,7 @@ runs = 1000
 [invariant]
 runs = 256
 depth = 100
-fail_on_revert = false
+fail_on_revert = true
 
 [profile.ci.fuzz]
 runs = 5000

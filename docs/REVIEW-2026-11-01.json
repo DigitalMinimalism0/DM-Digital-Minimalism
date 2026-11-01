@@ -1,0 +1,139 @@
+{
+  "date": "2026-11-01",
+  "reviewType": "Internal implementation-agent review; not an independent audit",
+  "compiler": "0.8.38",
+  "evmVersion": "cancun",
+  "optimizerRuns": 10000,
+  "runtimeBytes": 9093,
+  "creationBytecodeKeccak256": "0x175d2d7d4121dad56416771eaa66541cb426689a2616326e7234cc6c07fff54c",
+  "runtimeTemplateKeccak256": "0x4b698b9c8b8860327a2d925abcc9ef7710187a9e05a00d9b0cb68bf869921b5b",
+  "hashNormalization": "UTF-8 text, CRLF normalized to LF",
+  "files": {
+    "contracts/src/Offline.sol": "2acae84778c31a3af70e2fd7d83f7bbca80c5185ec1edf6651e1d66f66d91fed",
+    "contracts/src/Admin.sol": "64c3ebb8825c71d80d6109ae0fd63f8b3a020b334337f7c66129091fed1a3c9c",
+    "contracts/src/SafeToken.sol": "b63c389352cc88ad066fac2e16c2690f432213e54012844fddb3f77ed7981c51",
+    "contracts/src/StockereumBinding.sol": "6a3fe7914db2c5d2df897d748dbecc8ff9aa7ecb0c95827b2bd932022d92faf2",
+    "contracts/script/Deploy.s.sol": "bd46b45eed46476ca6561c2e477dc1e552241ac21c3814d87cc361ecebb95e79",
+    "foundry.toml": "3445732c96fc1546e7ff9d0ca5a4ac772e80371a400188d77e33eb9620bf8d9f",
+    "config.json": "c4bb19b40e95004f66466937ed2f966533deb2845bdf2ba09eac7ca29e3ff248",
+    "scripts/checks.mjs": "2115c7cd59e414c12c09aef5ebf9584026adcc09b2f9d0a15562fd4a227508b3",
+    "scripts/deploy.mjs": "04f19ffb6aa0be3c10da5dd55443727974b1725a4754b93912d44eff4601abdb",
+    "scripts/deployment-safety.mjs": "292ba129b62de2fcc4f54215b54e5bf049640cc05b6204c7156961d4155abffb",
+    "scripts/recover-deployment.mjs": "39693af700f2298771e72172004a522a4992c60d3998d6c8a505c2a642e33e35",
+    "scripts/prepare-mainnet.ps1": "40a6c30ab24423dba3d967d65053c85b5aaf7edccb137c66ddc321a41ffc33d9"
+  },
+  "slither": {
+    "version": "0.11.6",
+    "detectors": 102,
+    "findings": [
+      {
+        "detector": "weak-prng",
+        "toolSeverity": "High",
+        "confidence": "Medium",
+        "description": "Offline._checkpoint(address) (contracts/src/Offline.sol#224-234) uses a weak PRNG: \"p.remainder = scaled % PRECISION (contracts/src/Offline.sol#229)\" \n"
+      },
+      {
+        "detector": "reentrancy-balance",
+        "toolSeverity": "High",
+        "confidence": "Medium",
+        "description": "Reentrancy in Offline.deposit(uint256) (contracts/src/Offline.sol#108-125):\n\tExternal call allowing reentrancy:\n\t- token.safeTransferFrom(msg.sender,address(this),amount) (contracts/src/Offline.sol#122)\n\tBalance read before the call:\n\t- beforeBalance = token.balanceOf(address(this)) (contracts/src/Offline.sol#121)\n\tPossible stale balance used after the call in a condition:\n\t- token.balanceOf(address(this)) - beforeBalance != amount (contracts/src/Offline.sol#123)\n\t\t- stale variable `beforeBalance`\n"
+      },
+      {
+        "detector": "divide-before-multiply",
+        "toolSeverity": "Medium",
+        "confidence": "Medium",
+        "description": "Offline._fund(address,uint256) (contracts/src/Offline.sol#210-222) performs a multiplication on the result of a division:\n\t- increment = amount * PRECISION / _totalAge (contracts/src/Offline.sol#215)\n\t- timeIndex += increment * _time() (contracts/src/Offline.sol#218)\n"
+      },
+      {
+        "detector": "incorrect-equality",
+        "toolSeverity": "Medium",
+        "confidence": "High",
+        "description": "Offline._fund(address,uint256) (contracts/src/Offline.sol#210-222) uses a dangerous strict equality:\n\t- _totalAge == 0 (contracts/src/Offline.sol#214)\n"
+      },
+      {
+        "detector": "incorrect-equality",
+        "toolSeverity": "Medium",
+        "confidence": "High",
+        "description": "Offline.fundWeth() (contracts/src/Offline.sol#162-167) uses a dangerous strict equality:\n\t- amount == 0 (contracts/src/Offline.sol#164)\n"
+      },
+      {
+        "detector": "incorrect-equality",
+        "toolSeverity": "Medium",
+        "confidence": "High",
+        "description": "Offline._fund(address,uint256) (contracts/src/Offline.sol#210-222) uses a dangerous strict equality:\n\t- increment == 0 (contracts/src/Offline.sol#216)\n"
+      },
+      {
+        "detector": "incorrect-equality",
+        "toolSeverity": "Medium",
+        "confidence": "High",
+        "description": "Offline._fund(address,uint256) (contracts/src/Offline.sol#210-222) uses a dangerous strict equality:\n\t- amount == 0 (contracts/src/Offline.sol#212)\n"
+      },
+      {
+        "detector": "write-after-write",
+        "toolSeverity": "Medium",
+        "confidence": "High",
+        "description": "Offline._guard (contracts/src/Offline.sol#51) is written in both\n\t_guard = 2 (contracts/src/Offline.sol#172)\n\t_guard = 1 (contracts/src/Offline.sol#174)\n"
+      },
+      {
+        "detector": "missing-zero-check",
+        "toolSeverity": "Low",
+        "confidence": "Medium",
+        "description": "Admin.transferAdmin(address).newAdmin (contracts/src/Admin.sol#30) lacks a zero-check on :\n\t\t- pendingAdmin = newAdmin (contracts/src/Admin.sol#31)\n"
+      },
+      {
+        "detector": "missing-zero-check",
+        "toolSeverity": "Low",
+        "confidence": "Medium",
+        "description": "Offline.constructor(address,address,address).creator_ (contracts/src/Offline.sol#78) lacks a zero-check on :\n\t\t- expectedCreator = creator_ (contracts/src/Offline.sol#82)\n"
+      },
+      {
+        "detector": "reentrancy-benign",
+        "toolSeverity": "Low",
+        "confidence": "Medium",
+        "description": "Reentrancy in Offline.fundWeth() (contracts/src/Offline.sol#162-167):\n\tExternal calls:\n\t- weth.withdraw(amount) (contracts/src/Offline.sol#165)\n\tState variables written after the call(s):\n\t- _fund(msg.sender,amount) (contracts/src/Offline.sol#166)\n\t\t- _ageUpdatedAt = _time() (contracts/src/Offline.sol#243)\n\t- _fund(msg.sender,amount) (contracts/src/Offline.sol#166)\n\t\t- _totalAge = totalTokenSeconds() (contracts/src/Offline.sol#242)\n\t- _fund(msg.sender,amount) (contracts/src/Offline.sol#166)\n\t\t- ageIndex += increment (contracts/src/Offline.sol#217)\n\t- _fund(msg.sender,amount) (contracts/src/Offline.sol#166)\n\t\t- lastFundedAt = block.timestamp (contracts/src/Offline.sol#220)\n\t- _fund(msg.sender,amount) (contracts/src/Offline.sol#166)\n\t\t- timeIndex += increment * _time() (contracts/src/Offline.sol#218)\n\t- _fund(msg.sender,amount) (contracts/src/Offline.sol#166)\n\t\t- totalFunded += amount (contracts/src/Offline.sol#219)\n"
+      },
+      {
+        "detector": "timestamp",
+        "toolSeverity": "Low",
+        "confidence": "Medium",
+        "description": "Offline._fund(address,uint256) (contracts/src/Offline.sol#210-222) uses timestamp for comparisons\n\tDangerous comparisons:\n\t- _totalAge == 0 (contracts/src/Offline.sol#214)\n\t- increment == 0 (contracts/src/Offline.sol#216)\n"
+      },
+      {
+        "detector": "low-level-calls",
+        "toolSeverity": "Informational",
+        "confidence": "High",
+        "description": "Low level call in Offline.claim(address) (contracts/src/Offline.sol#143-155):\n\t- (ok,None) = recipient.call{value: amount}() (contracts/src/Offline.sol#152)\n"
+      },
+      {
+        "detector": "low-level-calls",
+        "toolSeverity": "Informational",
+        "confidence": "High",
+        "description": "Low level call in SafeToken._call(IERC20,bytes) (contracts/src/SafeToken.sol#22-27):\n\t- (ok,ret) = address(token).call(data) (contracts/src/SafeToken.sol#23)\n"
+      }
+    ],
+    "disposition": "All 14 diagnostics triaged in REVIEW-2026-11-01.md; scanner exits nonzero, no zero-warning claim"
+  },
+  "tests": {
+    "solidity": 25,
+    "javascript": 7,
+    "default": {
+      "conservationFuzzCases": 1000,
+      "referenceSequences": 1000,
+      "referenceStepsPerSequence": 96,
+      "invariantCalls": 25600,
+      "unexpectedReverts": 0
+    },
+    "ci": {
+      "seed": "0x20261101",
+      "conservationFuzzCases": 5000,
+      "referenceSequences": 1000,
+      "referenceStepsPerSequence": 96,
+      "invariantCalls": 76800,
+      "unexpectedReverts": 0
+    },
+    "mainnetFork": "passed; local simulation only",
+    "deploymentScript": "dry run passed; no broadcast or signer",
+    "browser": "passed including mined local CREATE validation"
+  },
+  "mainnetBroadcast": false
+}

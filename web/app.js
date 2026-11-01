@@ -896,8 +896,6 @@ identity?.addEventListener('pointerleave', () => {
   identity.style.setProperty('--y', '0px');
 });
 paint();
-await refresh();
-await Promise.allSettled([loadLeaderboard(), loadFunding()]);
 async function refreshLiveData() {
   if (document.hidden || busy || liveRefreshRunning) return;
   liveRefreshRunning = true;
@@ -913,3 +911,7 @@ setInterval(() => refreshLiveData().catch(() => {}), 12000);
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden) refreshLiveData().catch(() => {});
 });
+// Register live updates before initial RPC reads; slow funding history must not
+// delay the first automatic refresh of the participation leaderboard.
+await refresh();
+await Promise.allSettled([loadLeaderboard(), loadFunding()]);

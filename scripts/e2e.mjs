@@ -48,6 +48,14 @@ try {
     return (await publicClient.waitForTransactionReceipt({ hash })).contractAddress;
   }
   async function write(address, abi, functionName, args = [], value = 0n) {
+    const gas = await publicClient.estimateContractGas({
+      address,
+      abi,
+      functionName,
+      args,
+      value,
+      account: admin,
+    });
     const hash = await wallet.writeContract({
       address,
       abi,
@@ -55,8 +63,11 @@ try {
       args,
       value,
       chain: null,
+      gas: gas + gas / 5n + 5000n,
     });
-    return publicClient.waitForTransactionReceipt({ hash });
+    const receipt = await publicClient.waitForTransactionReceipt({ hash });
+    assert.equal(receipt.status, 'success', `Local ${functionName} transaction reverted`);
+    return receipt;
   }
   const hook = await deploy(mocks('MockHook')),
     weth = await deploy(mocks('MockWeth'));
@@ -137,7 +148,6 @@ try {
     { rpc, user, admin },
   );
   page = await context.newPage();
-  await page.clock.install();
   page.setDefaultTimeout(25000);
   page.setDefaultNavigationTimeout(25000);
   const errors = [];
@@ -170,6 +180,7 @@ try {
     document.getElementById('binding-status').textContent.includes('Connected permanently'),
   );
   await page.goto(origin + '/#participate');
+  await page.waitForSelector('#world.is-ready[data-view="offline"]');
   await page.locator('[data-connect]:visible').click();
   await page.getByRole('button', { name: 'MetaMask', exact: true }).click();
   await page.waitForFunction(() =>
@@ -218,6 +229,7 @@ try {
   );
   console.log('PASS creator fee claim, WETH unwrap and ETH funding through administrator UI');
   await page.goto(origin + '/#participate');
+  await page.waitForSelector('#world.is-ready[data-view="offline"]');
   await page.locator('[data-connect]:visible').click();
   await page.getByRole('button', { name: 'MetaMask', exact: true }).click();
   await page.waitForFunction(
@@ -233,7 +245,6 @@ try {
   assert.equal(await page.evaluate(() => document.hidden), false);
   await page.locator('#amount').fill('12.5');
   await write(offline, offlineAbi, 'fund', [], parseEther('0.1'));
-  await page.clock.fastForward(12000);
   await page.waitForFunction((previous) => {
     const block = document.getElementById('leaderboard-block').dataset.block;
     const earned = document.querySelector('#leaderboard-rows tr td:nth-child(4)')?.textContent;
@@ -330,6 +341,20 @@ try {
   console.log('Screenshots: .e2e/dm/desktop.png and mobile.png');
 } catch (error) {
   if (page) {
+    console.error(
+      'Page state:',
+      await page.evaluate(() => ({
+        hidden: document.hidden,
+        hash: location.hash,
+        world: document.getElementById('world')?.className,
+        view: document.getElementById('world')?.dataset.view,
+        leaderboardRects: document.getElementById('leaderboard').getClientRects().length,
+        updated: document.getElementById('leaderboard-updated').textContent,
+        block: document.getElementById('leaderboard-block').textContent,
+        state: document.getElementById('leaderboard-state').textContent,
+        earned: document.querySelector('#leaderboard-rows tr td:nth-child(4)')?.textContent,
+      })),
+    );
     console.error(
       'Browser status:',
       await page

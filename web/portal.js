@@ -7,6 +7,8 @@ export function initPortal({ admin = false } = {}) {
   const hero = document.getElementById('home');
   const image = hero?.querySelector('.ocean-window');
   if (!hero || !image || typeof IntersectionObserver !== 'function') return;
+  const initialHash = location.hash.slice(1);
+  let routeVersion = 0;
 
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const journey = document.createElement('div');
@@ -250,14 +252,17 @@ export function initPortal({ admin = false } = {}) {
   }
   function enter(view, { instant = false } = {}) {
     requestedView = view;
+    // Native initial fragments can arrive before this route runs. Protect both
+    // entry paths from the browser's remaining fragment-positioning steps.
+    if (instant) routeArrival = true;
     if (arrived) {
       openView(view || 'offline');
+      if (instant) window.scrollTo({ top: endScroll(), behavior: 'instant' });
       return;
     }
     prepareImage();
     // A direct route wins over inertia from an earlier wheel gesture until the next
     // scrolling input. Native wheel/touch scrolling itself remains uninterrupted.
-    routeArrival = instant;
     window.scrollTo({
       top: endScroll(),
       behavior: instant || reduced.matches ? 'instant' : 'smooth',
@@ -271,11 +276,11 @@ export function initPortal({ admin = false } = {}) {
     if (focus)
       requestAnimationFrame(() => hero.querySelector('.identity').focus({ preventScroll: true }));
   }
-  function routeHash({ instant = false } = {}) {
-    const hash = location.hash.slice(1);
-    if (routes[hash]) enter(routes[hash], { instant });
-    else if (hash === 'world') enter(undefined, { instant });
-    else if (hash === 'home' || !hash) leave({ instant });
+  function routeHash({ instant = false, hash = location.hash.slice(1) } = {}) {
+    if (routes[hash] || hash === 'world') {
+      setHash(hash, true);
+      enter(routes[hash], { instant });
+    } else if (hash === 'home' || !hash) leave({ instant });
   }
   document.addEventListener('click', (event) => {
     if (
@@ -291,6 +296,7 @@ export function initPortal({ admin = false } = {}) {
     if (!link) return;
     const hash = link.getAttribute('href').slice(1);
     if (!routes[hash] && hash !== 'world' && hash !== 'home') return;
+    routeVersion++;
     event.preventDefault();
     setHash(hash);
     if (hash === 'home') leave({ focus: true });
@@ -324,9 +330,14 @@ export function initPortal({ admin = false } = {}) {
     { passive: true },
   );
   // Let native fragment positioning finish before restoring our document-scroll entrance.
-  window.addEventListener('hashchange', () =>
-    requestAnimationFrame(() => routeHash({ instant: true })),
-  );
+  window.addEventListener('hashchange', (event) => {
+    const hash = new URL(event.newURL).hash.slice(1);
+    const version = ++routeVersion;
+    if (routes[hash] || hash === 'world') routeArrival = true;
+    requestAnimationFrame(() => {
+      if (version === routeVersion) routeHash({ instant: true, hash });
+    });
+  });
   window.addEventListener('resize', () => {
     const keepInside = arrived;
     cancelAnimationFrame(resizeFrame);
@@ -353,5 +364,7 @@ export function initPortal({ admin = false } = {}) {
     })
     .catch(() => {});
   buildEffects();
-  requestAnimationFrame(() => routeHash({ instant: true }));
+  requestAnimationFrame(() => {
+    if (routeVersion === 0) routeHash({ instant: true, hash: initialHash });
+  });
 }

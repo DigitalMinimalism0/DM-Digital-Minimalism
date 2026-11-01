@@ -137,6 +137,7 @@ try {
     { rpc, user, admin },
   );
   page = await context.newPage();
+  await page.clock.install();
   page.setDefaultTimeout(25000);
   page.setDefaultNavigationTimeout(25000);
   const errors = [];
@@ -228,8 +229,11 @@ try {
   assert.equal(await page.locator('#world-content > #leaderboard').count(), 1);
   await page.waitForSelector('#leaderboard-block[data-block]');
   const previousRankingBlock = await page.locator('#leaderboard-block').getAttribute('data-block');
+  await page.bringToFront();
+  assert.equal(await page.evaluate(() => document.hidden), false);
   await page.locator('#amount').fill('12.5');
   await write(offline, offlineAbi, 'fund', [], parseEther('0.1'));
+  await page.clock.fastForward(12000);
   await page.waitForFunction((previous) => {
     const block = document.getElementById('leaderboard-block').dataset.block;
     const earned = document.querySelector('#leaderboard-rows tr td:nth-child(4)')?.textContent;
@@ -237,6 +241,10 @@ try {
   }, previousRankingBlock);
   assert.equal(await page.locator('#amount').inputValue(), '12.5');
   assert.match(await page.locator('#leaderboard-updated').textContent(), /Live.*Updated/);
+  assert.equal(await page.locator('#leaderboard-rows .rank-number').first().textContent(), '01');
+  const recordedDuration = await page.locator('#age-note .numeric-time').textContent();
+  assert.match(recordedDuration, /^\d{2,}:\d{2}:\d{2}$/);
+  assert.ok(Number(recordedDuration.split(':')[0]) >= 24);
   await page.locator('#leaderboard').scrollIntoViewIfNeeded();
   await page.screenshot({ path: join(dir, 'live-leaderboard.png') });
   console.log('PASS participation leaderboard automatically reflects external ETH funding');

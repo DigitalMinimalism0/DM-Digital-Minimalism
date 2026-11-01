@@ -58,8 +58,9 @@ try {
   assert.ok(Math.abs(initial.width - opening.width) < 2);
   assert.equal(
     await page.locator('body').evaluate((el) => getComputedStyle(el).fontFamily.split(',')[0]),
-    'Archivo',
+    '"Albert Sans"',
   );
+  assert.ok(await page.evaluate(() => document.fonts.check('700 64px Doto')));
   await page.screenshot({ path: join(dir, 'entrance.png') });
   await scroll(0.5);
   const middle = await page.locator('.world-backdrop').boundingBox();

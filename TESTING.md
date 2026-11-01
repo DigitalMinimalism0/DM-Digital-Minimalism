@@ -16,6 +16,8 @@ Coverage: pre-launch disabled state → wallet-gated admin → one-time CA bindi
 
 The leaderboard is also checked directly below participation. An ETH funding submitted outside the browser must update its ranking snapshot automatically without clicking refresh, while preserving the user's amount draft. Portal checks cover the shared table across navigation and the honest pre-launch empty state.
 
+The browser rehearsal uses Playwright's clock to advance the 12-second polling interval deterministically. Funding and reward values still come from the local contract. It also checks two-digit leaderboard places and the contract-derived average deposit time rendered as hours:minutes:seconds.
+
 Use installed Edge on Windows by default; CI uses Chromium. `E2E_BROWSER=chromium` selects the latter. Install it with `pnpm exec playwright-core install chromium` if needed.
 
 ## Real platform integration

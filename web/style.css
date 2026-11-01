@@ -1,7 +1,21 @@
 @font-face {
-  font-family: 'Archivo';
-  src: url('/fonts/archivo-latin-variable.woff2') format('woff2');
+  font-family: 'Albert Sans';
+  src: url('/fonts/albert-sans-latin-variable.woff2') format('woff2');
   font-weight: 300 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Doto';
+  src: url('/fonts/doto-latin-variable.woff2') format('woff2');
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: url('/fonts/ibm-plex-mono-latin-400.woff2') format('woff2');
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
@@ -14,7 +28,7 @@
   --gutter: clamp(22px, 5vw, 88px);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   color-scheme: dark;
-  font-family: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Albert Sans', 'Helvetica Neue', Arial, sans-serif;
   font-kerning: normal;
   font-synthesis: none;
   font-optical-sizing: auto;
@@ -115,7 +129,7 @@ h1,
 h2,
 h3 {
   text-wrap: balance;
-  font-weight: 500;
+  font-weight: 400;
 }
 h1 {
   font-size: clamp(32px, 4vw, 56px);
@@ -177,7 +191,7 @@ strong {
 }
 .wordmark {
   font-size: 34px;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: -0.04em;
   line-height: 1;
 }
@@ -1160,6 +1174,52 @@ dialog p {
   }
 }
 /* digital minimalism is the project; DM is its token. */
+.digital-type,
+.rank-number,
+.step-number {
+  font-family: 'Doto', 'Albert Sans', sans-serif;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.identity-type > .digital-type {
+  font-size: 0.9em;
+  align-self: center;
+  letter-spacing: -0.04em;
+}
+.funding-facts strong,
+.account-overview strong,
+.amount-field input,
+.admin-balances dd,
+.leaderboard-section td:nth-child(n + 3),
+.leaderboard-section td:nth-child(2) a,
+.address-row code,
+.numeric-time {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+.rank-number {
+  font-size: 1.625rem;
+  line-height: 1.2;
+  color: var(--ink);
+  min-width: 70px;
+}
+.step-number {
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+.numeric-time {
+  display: block;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 4px 0;
+}
+.time-caption {
+  display: block;
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
 .wordmark {
   font-size: 21px;
   font-weight: 500;
@@ -1362,7 +1422,7 @@ dialog p {
 }
 .world-content .participation-copy h2 {
   font-size: clamp(38px, 4.2vw, 60px);
-  font-weight: 400;
+  font-weight: 300;
   line-height: 1.1;
   letter-spacing: -0.025em;
 }

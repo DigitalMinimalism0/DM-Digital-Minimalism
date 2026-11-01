@@ -40,7 +40,7 @@ flowchart LR
 
 ## An interface you can put down
 
-A native scroll entrance expands the ocean photograph into the newer photographic halftone background. The preceding section layout opens directly into a dark reading surface with ordinary forms: deposit, withdraw, collect. Texture stays outside the text surface. Exact-amount approvals, transaction review, a consistent-block rewards leaderboard, funding records and an administrator launch panel. No terminal or end-user CLI. Archivo, image and scripts are served locally; no analytics or tracking cookies.
+A native scroll entrance expands the ocean photograph into the newer photographic halftone background. The preceding section layout opens directly into a dark reading surface with ordinary forms: deposit, withdraw, collect. Texture stays outside the text surface. Exact-amount approvals, transaction review, a consistent-block rewards leaderboard, funding records and an administrator launch panel. No terminal or end-user CLI. Fonts, image and scripts are served locally; no analytics or tracking cookies.
 
 The live rewards leaderboard sits directly below participation and checks for new chain data every 12 seconds. It shows total ETH earned, collected ETH, deposited DM and the connected wallet's place, with a visible update time. Pre-launch and unavailable data are labelled explicitly.
 
@@ -95,6 +95,6 @@ The administrator can pause **new deposits only** and transfer the role through 
 
 - [Digital minimalism, Vitalik Buterin, 31 October 2026](https://vitalik.eth.limo/general/2026/10/31/digital_minimalism.html).
 - [Stockereum official documentation](https://stockereum.com/docs); [integration verification](docs/STOCKEREUM.md).
-- Archivo (active), Albert Sans, Manrope and IBM Plex fonts: SIL Open Font License, license files in `web/fonts/`.
+- Albert Sans, Doto and IBM Plex Mono (active); Archivo and Manrope (archived): SIL Open Font License, license files in `web/fonts/`.
 - [Ocean image on Unsplash](https://images.unsplash.com/photo-1518837695005-2083093ee35b), stored locally with monochrome treatment.
 - Code: [MIT](LICENSE). Maintained under [DigitalMinimalism0](https://github.com/DigitalMinimalism0).

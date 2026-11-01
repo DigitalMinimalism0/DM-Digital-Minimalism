@@ -1,6 +1,6 @@
 # DM visual system
 
-Reading this as a redesign for ordinary token holders: quiet, monochrome, spatial branding with familiar product controls. Native HTML/CSS, self-hosted Archivo and bundled viem retain the small static-site architecture. Design variance 6/10; motion intensity 6/10 at the scroll entrance and 2/10 in the product; visual density 3/10 on brand surfaces, 5/10 inside the participation form.
+Reading this as a redesign for ordinary token holders: quiet, monochrome, spatial branding with familiar product controls. Native HTML/CSS, self-hosted Albert Sans and bundled viem retain the small static-site architecture. Design variance 6/10; motion intensity 6/10 at the scroll entrance and 2/10 in the product; visual density 3/10 on brand surfaces, 5/10 inside the participation form.
 
 ## Preserve
 
@@ -12,7 +12,7 @@ Remove terminal syntax, CLI installation and burn ritual. Replace with a visible
 
 ## Typography and shape
 
-Archivo 300–600 self-hosted with its OFL license. Body 16px/1.65; functional labels, balance captions, field notes, protocol status and transaction details 14px/1.65. Large identity lettering uses weight 300 and -0.03em tracking; participation headings use weight 400, with regular body text and medium control labels. Administration uses a 36px/500 title, 22px/500 section headings, 15px/1.7 explanatory copy and 14px/500 form labels. Wallet and balance numbers use tabular figures. Large identity lettering is a brand graphic, not a functional heading. Square controls and surfaces, no decorative shadows or gradient treatments. Text uses sentence case; financial values preserve exact wallet/contract case where useful.
+Albert Sans 300–600 is restored as the light primary typeface. Doto uses its rounded dot instance for the hero word “digital”, the display token “DM”, genuine step numbers and two-digit leaderboard places. IBM Plex Mono is reserved for financial values, addresses and the average deposit-time readout. All three are self-hosted with their OFL licenses. Small labels, body copy and controls remain conventional sans-serif. Body 16px/1.65; functional labels, balance captions, field notes, protocol status and transaction details 14px/1.65. Large identity lettering uses weight 300 and -0.03em tracking; participation headings use weight 300, with regular body text and medium control labels. Administration uses a 36px/500 title, 22px/500 section headings, 15px/1.7 explanatory copy and 14px/500 form labels. Wallet and balance numbers use tabular figures. Average time offline is displayed as hours:minutes:seconds, calculated from the contract snapshot as token-seconds divided by deposited DM and refreshed with chain data. It is never a fabricated countdown or proof of personal disconnection. Large identity lettering is a brand graphic, not a functional heading. Square controls and surfaces, no decorative shadows or gradient treatments. Text uses sentence case; financial values preserve exact wallet/contract case where useful.
 
 ## Motion and accessibility
 
@@ -28,4 +28,4 @@ Below 760px, participation stacks; process steps become a vertical sequence; pro
 
 ## Assets
 
-Ocean fallback photograph: https://images.unsplash.com/photo-1518837695005-2083093ee35b, local web/images/ocean.jpg. Archivo: https://github.com/Omnibus-Type/Archivo, self-hosted under SIL OFL with the license in web/fonts/archivo-OFL.txt. No remote analytics, scripts or font requests. Repository cover is native vector typography, not a final logo.
+Ocean fallback photograph: https://images.unsplash.com/photo-1518837695005-2083093ee35b, local web/images/ocean.jpg. Active typefaces: Albert Sans (web/fonts/albert-sans-OFL.txt), Doto (https://github.com/oliverlalan/Doto; web/fonts/doto-OFL.txt) and IBM Plex Mono (web/fonts/OFL.txt), all self-hosted under SIL OFL. Archivo and Manrope remain archived font assets. No remote analytics, scripts or font requests. Repository cover is native vector typography, not a final logo.

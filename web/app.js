@@ -244,10 +244,24 @@ function paint() {
   $('claim-reward').disabled = busy || !liveReady || !address || position[2] === 0n;
   $('max-amount').disabled = busy || !address || token === ZERO;
   $('amount').disabled = busy;
-  $('age-note').textContent =
-    position[0] > 0n
-      ? `Average time offline: ${number(position[1] / position[0] / 60n, 0, 0)} minutes. Collecting ETH keeps this time.`
-      : 'Your time starts when your deposit is confirmed.';
+  if (position[0] > 0n) {
+    const seconds = position[1] / position[0];
+    const duration = document.createElement('span');
+    duration.className = 'numeric-time';
+    duration.textContent = [seconds / 3600n, (seconds / 60n) % 60n, seconds % 60n]
+      .map((value) => String(value).padStart(2, '0'))
+      .join(':');
+    const caption = document.createElement('span');
+    caption.className = 'time-caption';
+    caption.textContent = 'Average time offline · h:m:s';
+    $('age-note').replaceChildren(
+      caption,
+      duration,
+      document.createTextNode('Collecting ETH keeps this time.'),
+    );
+  } else {
+    $('age-note').textContent = 'Your time starts when your deposit is confirmed.';
+  }
   $('token-symbol').textContent = cfg.brand.symbol;
   renderLeaderboard();
 }
@@ -655,7 +669,7 @@ function renderLeaderboard() {
     const tr = document.createElement('tr');
     if (same(row.address, address)) tr.className = 'is-you';
     for (const text of [
-      String(i + 1),
+      String(i + 1).padStart(2, '0'),
       short(row.address),
       number(row.amount, 18, 2),
       number(row.claimable + row.claimed, 18, 8),
@@ -665,6 +679,7 @@ function renderLeaderboard() {
       td.textContent = text;
       tr.append(td);
     }
+    tr.firstElementChild.className = 'rank-number';
     const a = document.createElement('a');
     a.href = `${cfg.explorer}/address/${row.address}`;
     a.target = '_blank';

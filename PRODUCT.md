@@ -20,7 +20,7 @@ Public surface: keep the newer photographic circular halftone background and res
 
 ## Voice
 
-Typography follows a restrained digital direction: restore Albert Sans as the primary light face, use rounded Doto only for selected large brand words and genuine sequence/rank numbers, and use IBM Plex Mono for financial figures and recorded average deposit time. Reference imagery informs this treatment without changing the accepted page sections, sea grain or dark reading surfaces. Display only real chain-derived values; do not add decorative random numbers or implied live earnings.
+Typography follows a restrained digital direction: restore Albert Sans as the primary light face, keep brand words and token names in clean sans-serif, and use IBM Plex Mono for financial figures, restrained rank numbers and recorded average deposit time. Decorative dot-matrix type is withdrawn. Reference imagery informs this treatment without changing the accepted page sections, sea grain or dark reading surfaces. Display only real chain-derived values; do not add decorative random numbers or implied live earnings.
 
 Brand prose may be literary and restrained. Operational and economic prose must be literal and complete. Original project language must not be attributed to Vitalik. Inspiration never implies affiliation or endorsement. No guaranteed returns, fixed APY, verified human disconnection or automatic creator funding claims.
 

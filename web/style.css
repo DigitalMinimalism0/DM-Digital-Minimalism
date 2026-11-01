@@ -6,13 +6,6 @@
   font-display: swap;
 }
 @font-face {
-  font-family: 'Doto';
-  src: url('/fonts/doto-latin-variable.woff2') format('woff2');
-  font-weight: 400 800;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
   font-family: 'IBM Plex Mono';
   src: url('/fonts/ibm-plex-mono-latin-400.woff2') format('woff2');
   font-weight: 400;
@@ -1174,18 +1167,6 @@ dialog p {
   }
 }
 /* digital minimalism is the project; DM is its token. */
-.digital-type,
-.rank-number,
-.step-number {
-  font-family: 'Doto', 'Albert Sans', sans-serif;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-}
-.identity-type > .digital-type {
-  font-size: 0.9em;
-  align-self: center;
-  letter-spacing: -0.04em;
-}
 .funding-facts strong,
 .account-overview strong,
 .amount-field input,
@@ -1199,14 +1180,12 @@ dialog p {
   font-variant-numeric: tabular-nums;
 }
 .rank-number {
-  font-size: 1.625rem;
-  line-height: 1.2;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.875rem;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
   color: var(--ink);
   min-width: 70px;
-}
-.step-number {
-  font-size: 1.5rem;
-  line-height: 1.2;
 }
 .numeric-time {
   display: block;

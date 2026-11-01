@@ -95,6 +95,6 @@ The administrator can pause **new deposits only** and transfer the role through 
 
 - [Digital minimalism, Vitalik Buterin, 31 October 2026](https://vitalik.eth.limo/general/2026/10/31/digital_minimalism.html).
 - [Stockereum official documentation](https://stockereum.com/docs); [integration verification](docs/STOCKEREUM.md).
-- Albert Sans, Doto and IBM Plex Mono (active); Archivo and Manrope (archived): SIL Open Font License, license files in `web/fonts/`.
+- Albert Sans and IBM Plex Mono (active); Archivo and Manrope (archived): SIL Open Font License, license files in `web/fonts/`.
 - [Ocean image on Unsplash](https://images.unsplash.com/photo-1518837695005-2083093ee35b), stored locally with monochrome treatment.
 - Code: [MIT](LICENSE). Maintained under [DigitalMinimalism0](https://github.com/DigitalMinimalism0).

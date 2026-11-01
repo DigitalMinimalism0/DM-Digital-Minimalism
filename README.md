@@ -5,7 +5,7 @@
 <p align="center">
   <a href="https://github.com/DigitalMinimalism0/DM-Digital-Minimalism/actions/workflows/ci.yml"><img alt="Build and tests" src="https://github.com/DigitalMinimalism0/DM-Digital-Minimalism/actions/workflows/ci.yml/badge.svg"></a>
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-white?style=flat-square&labelColor=111111"></a>
-  <a href="docs/README.zh-CN.md">中文说明</a> · <a href="docs/ACCOUNTING.md">The mathematics</a> · <a href="LAUNCH.md">Launch guide</a> · <a href="SECURITY.md">Security</a>
+  <a href="docs/ACCOUNTING.md">The mathematics</a> · <a href="LAUNCH.md">Launch guide</a> · <a href="SECURITY.md">Security</a>
 </p>
 
 **Let your tokens rest. Keep your time.**

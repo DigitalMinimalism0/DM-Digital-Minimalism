@@ -1,12 +1,12 @@
-# 上线说明
+# Launch guide
 
-部署者 / 原始创作者：`0x4fc6e37d6aefb348cff3791f493ce49754af905a`。
+Deployer / original creator: `0x4fc6e37d6aefb348cff3791f493ce49754af905a`.
 
-**先配套合约和网站，最后发币。** 主网交易由项目方本人检查并在本机签名。不要把私钥放进聊天、仓库、网页、Vercel 或脚本参数。
+**Prepare the companion contract and website first. Launch the token last.** The project owner must review and sign mainnet transactions locally. Keep private keys out of chat, the repository, the website, Vercel and script arguments.
 
-## 1. 安装与验收
+## 1. Install and verify
 
-本次部署使用 Solidity **0.8.38**。先阅读 [部署前安全复核记录](docs/REVIEW-2026-11-01.md)，不要混用旧编译产物。
+This deployment uses Solidity **0.8.38**. Read the [pre-deployment security review](docs/REVIEW-2026-11-01.md) first and avoid mixing old build artifacts with the current build.
 
 ```powershell
 pnpm install --frozen-lockfile
@@ -17,107 +17,107 @@ pnpm test:e2e
 pnpm preflight:mainnet
 ```
 
-`preflight:mainnet` 仅做公开链上读取，不签名。没有正式钱包授权也可以执行。主网 fork 演练：
+`preflight:mainnet` only reads public on-chain data and never signs transactions. It can run without access to the production wallet. For a mainnet-fork rehearsal:
 
 ```powershell
-$env:MAINNET_RPC_URL = '你的 Ethereum RPC'
+$env:MAINNET_RPC_URL = 'YOUR_ETHEREUM_RPC_URL'
 pnpm test:fork
 ```
 
-Logo 与 X 账号目前待补；`web/favicon.svg`、页面文字标识可替换。`config.json` 的 `links.twitter` 保持 `null` 时不会出现错误的社交链接。代币显示符号在 `brand.symbol` 配置。
+The logo and X account are pending. Replace `web/favicon.svg` and the text mark when final assets are ready. Leaving `links.twitter` as `null` in `config.json` prevents an incorrect social link from appearing. Configure the displayed token symbol through `brand.symbol`.
 
-## 2. 本机配置签名
+## 2. Configure local signing
 
-使用加密 keystore：
+Use an encrypted keystore:
 
 ```powershell
 .\scripts\prepare-mainnet.ps1 -ImportKey
 ```
 
-只在 Foundry 自己的隐藏交互提示里输入新钱包私钥，并设 keystore 密码。文件在 `$HOME\.foundry\keystores\dm-deployer`，不在项目内。脚本隐藏询问 RPC 与 Etherscan key，只放入当前进程环境，不读取 `$HOME\.web3\secrets.env`。
+Enter the new wallet's private key only in Foundry's hidden interactive prompt, and set a keystore password. The keystore is stored at `$HOME\.foundry\keystores\dm-deployer`, outside the project. The script prompts privately for the RPC URL and Etherscan key, keeps them only in the current process environment and does not read `$HOME\.web3\secrets.env`.
 
-已有 keystore 时：
+With an existing keystore:
 
 ```powershell
 .\scripts\prepare-mainnet.ps1
 ```
 
-Ledger：
+With a Ledger:
 
 ```powershell
 .\scripts\prepare-mainnet.ps1 -Ledger
 ```
 
-## 3. 由你执行主网部署
+## 3. Execute the mainnet deployment yourself
 
-确认 config.admin 是新地址，config.token 是零地址；确认测试通过。然后在同一个 PowerShell 中执行：
+Confirm that `config.admin` is the new address, `config.token` is the zero address and all tests pass. Then run this in the same PowerShell session:
 
 ```powershell
 pnpm deploy:mainnet
 ```
 
-脚本核对签名钱包，重新读取平台关键设置，部署一个不可升级的 Offline 合约，并请求 Etherscan 源码验证。没有发币，也不需要提前知道 CA。
+The script checks the signer, reads the platform's critical settings again, deploys one non-upgradeable Offline contract and requests Etherscan source verification. It does not launch a token or require its contract address in advance.
 
-Forge 模拟地址写入忽略的 `deployments/.pending-*`，只有广播成功且链上有代码后才写入 `deployments/1.json`。有现存部署文件时拒绝重复部署。任何广播阶段报错，都先检查 `broadcast/` 和 staging，不要直接重新执行。
+Forge's simulated address is written to ignored `deployments/.pending-*` staging files. The script writes `deployments/1.json` only after a successful broadcast and confirmation that code exists on-chain. An existing deployment manifest prevents another deployment. If any broadcast step fails, inspect `broadcast/` and staging before retrying.
 
-脚本在广播前创建原子锁 `deployments/.pending-offline-lock/`。失败时保留锁，阻止另一个终端或重试意外再部署。成功后还会核对链上创建交易、部署者、构造参数与完整运行时代码，再发布 manifest 和释放锁。
+Before broadcasting, the script creates an atomic lock at `deployments/.pending-offline-lock/`. A failure preserves the lock to prevent another terminal or retry from deploying again accidentally. After success, it checks the creation transaction, deployer, constructor arguments and complete runtime bytecode before publishing the manifest and releasing the lock.
 
-若交易已成功，但浏览器验证或后续步骤失败，先 `forge build`，再用实际交易哈希恢复原地址：
+If the transaction succeeded but explorer verification or a later step failed, run `forge build` and recover the original address using the actual deployment transaction hash:
 
 ```powershell
-pnpm recover:deployment -- 0x你的部署交易哈希
+pnpm recover:deployment -- 0xYOUR_DEPLOYMENT_TRANSACTION_HASH
 ```
 
-恢复命令只读取链上数据并写回公开 manifest，不签名、不重部署；只接受当前编译产物、配置和部署者完全匹配的创建交易。恢复不会替代 Etherscan 源码验证。若此前根本未广播，核对链上 nonce、交易和 staging 后再处理锁；不能通过删锁直接跳过调查。
+Recovery only reads on-chain data and writes the public manifest. It neither signs nor redeploys. It accepts only a creation transaction that exactly matches the current build artifacts, configuration and deployer. Recovery does not replace Etherscan source verification. If no transaction was broadcast, inspect the on-chain nonce, transactions and staging before handling the lock; do not delete the lock to bypass that investigation.
 
 ```powershell
 pnpm verify:deployment
 ```
 
-还需在 Etherscan 确认源码已验证。若平台 API 暂时失败，恢复验证，不要因此重新部署。
+Also confirm that the source is verified on Etherscan. If the platform API fails temporarily, resume verification without redeploying.
 
-## 4. 发布网站并验收后台
+## 4. Publish the website and verify the admin panel
 
-将新的公开 deployment manifest 提交到 GitHub。Vercel 使用仓库内配置构建静态站点：
+Commit the new public deployment manifest to GitHub. Vercel builds the static site using the repository configuration:
 
 ```powershell
 pnpm build
 vercel --prod
 ```
 
-`/admin` 连接新钱包，检查链、合约、creator 与未绑定状态。发币前的公众页面应诚实显示尚未启动，禁止正式存入。验证手机端、钱包切换及错误反馈。
+Connect the new wallet at `/admin` and check the chain, contract, creator and unbound state. Before the token launches, the public page must clearly show that participation has not started and keep deposits disabled. Verify the mobile layout, wallet switching and error feedback.
 
-## 5. 最后在 Stockereum 发币
+## 5. Launch the token on Stockereum last
 
-使用原始创作者钱包 `0x4fc6e37d6aefb348cff3791f493ce49754af905a`，设置：
+Use the original creator wallet, `0x4fc6e37d6aefb348cff3791f493ce49754af905a`, with these settings:
 
-- 项目名 `digital minimalism`，代币符号 `DM`，与 `brand` 配置一致。
-- ETH 交易对。
-- 正常交易费 3%。
-- **Holder Rewards OFF**，创作者自行领取手续费。
+- Project name: `digital minimalism`; token symbol: `DM`, matching the `brand` configuration.
+- ETH trading pair.
+- Normal trading fee: 3%.
+- **Holder Rewards OFF**; the creator claims fees manually.
 
-平台正常拆分为 1% 平台、2% 创作者。开盘前 20 秒有临时更高反抢跑费率。发布前再次核对平台实际界面。
+The normal platform split is 1% for the platform and 2% for the creator. A temporary higher anti-snipe fee applies during the first 20 seconds after launch. Check the actual platform interface again before publishing.
 
-## 6. 后台绑定 CA
+## 6. Bind the token contract in the admin panel
 
-进入 `/admin`，填入刚发射的完整 CA，点击 Review token binding，检查确认说明后在钱包签名。绑定永久且唯一。
+Open `/admin`, enter the newly launched token's full contract address, click Review token binding, read the confirmation and sign in the wallet. Binding is permanent and can happen only once.
 
-合约核对官方 factory/hook、原始 creator、10 亿供应量、WETH quote、3% fee 与创作者收款模式。绑定完成后，网站从链上读取并开放参与，无需再改代码或重新部署。
+The contract checks the official factory/hook, original creator, one-billion-token supply, WETH quote, 3% fee and creator fee-recipient mode. Once binding succeeds, the website reads the on-chain state and opens participation without further code changes or redeployment.
 
-## 7. 手续费与奖励
+## 7. Fees and rewards
 
-后台按顺序操作，每步独立签名：
+Use the admin panel in this order, signing each step separately:
 
-1. Claim WETH：从 Stockereum 托管领取到原始创作者自己的钱包。
-2. Unwrap WETH：将选定的 WETH 解包为钱包内 ETH。
-3. 填入 ETH 数量并 Review ETH funding：向 Offline 注资，按当时有效时间权重立即分配。
+1. Claim WETH: claim from Stockereum escrow into the original creator's own wallet.
+2. Unwrap WETH: convert the selected WETH amount into ETH in that wallet.
+3. Enter an ETH amount and select Review ETH funding: fund Offline and immediately allocate rewards using the active time weights at that moment.
 
-至少要有一位用户已存入，且时间权重大于零，才能注资。没有参与者时保留 ETH 在自己的钱包，不预先注资。
+Funding requires at least one depositor and a positive total time weight. If there are no participants, keep the ETH in the creator's wallet instead of funding in advance.
 
-若误把 WETH 直接发到 Offline，后台会检测余额并提供 `fundWeth` 转换。WETH 转账本身不会形成奖励，转换时才分配，且任何人都可以触发转换。
+If WETH is accidentally sent directly to Offline, the admin panel detects the balance and offers `fundWeth` conversion. The WETH transfer itself does not allocate rewards; allocation happens at conversion, which anyone can trigger.
 
-## 运行边界
+## Operating boundaries
 
-用户随时部分/全部取回，无期限、冷却、退出费或奖励没收。管理员暂停仅影响新增存入。转移管理员不转移 Stockereum 原始创作者的手续费权利。
+Users can withdraw some or all of their principal at any time, without a fixed term, cooldown, exit fee or reward forfeiture. An administrator pause affects only new deposits. Transferring the administrator role does not transfer the original Stockereum creator's fee rights.
 
-网页公开奖励、地址和注资记录；不承诺隐私、不保证收益。代码开源与测试不等于外部审计。
+The website publishes rewards, addresses and funding records. It promises neither privacy nor returns. Open source code and automated tests do not constitute an external audit.

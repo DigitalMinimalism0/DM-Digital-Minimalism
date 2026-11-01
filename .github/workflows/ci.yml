@@ -1,0 +1,33 @@
+name: Build and tests
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: v1.7.1
+      - run: pnpm install --frozen-lockfile
+      - run: forge build --sizes
+      - run: pnpm test
+      - run: pnpm build
+      - run: pnpm exec playwright-core install --with-deps chromium
+      - run: pnpm test:e2e
+        env:
+          E2E_BROWSER: chromium
+      - run: pnpm audit:source
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-evidence
+          path: .e2e/dm/*.png

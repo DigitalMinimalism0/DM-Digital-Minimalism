@@ -1,0 +1,17 @@
+.e2e/
+node_modules/
+out/
+cache/
+dist/
+broadcast/
+.env*
+*keypair*.json
+.anchor/
+.vercel/
+.claude/
+.openai/
+.e2e-run.log
+.slither-run.log
+deployments/.pending-*/
+X banner.png
+X icon (1).png

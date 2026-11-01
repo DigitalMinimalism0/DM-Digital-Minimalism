@@ -1,0 +1,10 @@
+node_modules
+lib
+out
+cache
+dist
+.e2e
+broadcast
+.vercel
+.claude
+pnpm-lock.yaml

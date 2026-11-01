@@ -1,0 +1,18 @@
+.git/
+.claude/
+.e2e/
+node_modules/
+out/
+cache/
+broadcast/
+dist/
+lib/
+contracts/
+test/
+.github/
+.env*
+*keypair*.json
+.anchor/
+X banner.png
+X icon (1).png
+deployments/.pending-*/

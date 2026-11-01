@@ -1,0 +1,44 @@
+{
+  "name": "dm-digital-minimalism",
+  "version": "2.0.0",
+  "private": true,
+  "description": "DM: flexible deposits and token-seconds-weighted ETH rewards. Your time is your own.",
+  "license": "MIT",
+  "type": "module",
+  "packageManager": "pnpm@10.15.1",
+  "engines": {
+    "node": ">=22"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DigitalMinimalism0/DM-Digital-Minimalism.git"
+  },
+  "scripts": {
+    "build": "node scripts/build-web.mjs",
+    "dev": "node scripts/build-web.mjs && node scripts/serve.mjs dist",
+    "test": "pnpm test:contracts && pnpm test:js",
+    "test:contracts": "forge test --no-match-path contracts/test/fork/*",
+    "test:fork": "forge test --match-path contracts/test/fork/* -vv",
+    "test:js": "node --test test/*.test.mjs",
+    "test:e2e": "node scripts/e2e.mjs",
+    "preflight:mainnet": "node scripts/preflight.mjs",
+    "deploy:mainnet": "node scripts/deploy.mjs",
+    "verify:deployment": "node scripts/verify-deployment.mjs",
+    "audit:source": "node scripts/audit-source.mjs",
+    "format": "prettier --write web core scripts test docs *.md *.json .github/workflows/*.yml",
+    "format:check": "prettier --check web core scripts test docs *.md *.json .github/workflows/*.yml"
+  },
+  "dependencies": {
+    "viem": "2.57.14"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "playwright-core": "1.64.1",
+    "prettier": "3.9.10"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}

@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>DM · Digital Minimalism</title>
+    <meta
+      name="description"
+      content="Let your tokens rest. Keep your time. Flexible deposits, time-weighted ETH rewards, and the freedom to leave."
+    />
+    <meta name="theme-color" content="#080808" />
+    <meta property="og:title" content="DM · The world can wait." />
+    <meta
+      property="og:description"
+      content="A quieter way to participate. Flexible deposits. Time-weighted ETH rewards."
+    />
+    <link rel="icon" href="/favicon.svg" />
+    <link
+      rel="preload"
+      href="/fonts/manrope-latin-variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="/style.css" />
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#offline-space">Skip to participation</a>
+    <div class="site-shell">
+      <header class="site-header">
+        <a class="wordmark" href="/" aria-label="DM home">dm.</a>
+        <nav aria-label="Main navigation">
+          <a href="#idea">The idea</a><a href="#leaderboard">Rewards</a
+          ><a href="/whitepaper">The paper ↗</a
+          ><a
+            data-github
+            href="https://github.com/DigitalMinimalism0/DM-Digital-Minimalism"
+            target="_blank"
+            rel="noopener noreferrer"
+            >GitHub ↗</a
+          >
+        </nav>
+        <button class="wallet-button" data-connect>Connect wallet ↗</button>
+      </header>
+      <main>
+        <section class="hero" id="home" aria-labelledby="hero-title">
+          <div class="hero-meta">
+            <span>Digital Minimalism</span><span>An independent experiment.</span>
+          </div>
+          <a class="identity" href="#offline-space" aria-label="Go offline with DM"
+            ><div class="ocean-window">
+              <img
+                src="/images/ocean.jpg"
+                alt="A quiet ocean horizon in monochrome"
+                width="480"
+                height="480"
+                fetchpriority="high"
+              /><span class="print-screen" aria-hidden="true"></span>
+            </div>
+            <span class="identity-type" aria-hidden="true">dm.</span></a
+          >
+          <div class="hero-bottom">
+            <div>
+              <h1 id="hero-title">The world can wait.</h1>
+              <p>Let your tokens rest.<br />Keep your time.</p>
+            </div>
+            <a class="primary-link" href="#offline-space"
+              >Go offline <span aria-hidden="true">↗</span></a
+            ><a class="hero-note" href="#how">No fixed term.<br />Leave whenever you choose.</a>
+          </div>
+        </section>
+        <section class="participation section" id="participate" aria-labelledby="participate-title">
+          <div class="participation-copy">
+            <p class="section-caption">Your time is your own.</p>
+            <h2 id="participate-title">A quieter way<br />to participate.</h2>
+            <p>
+              Put a little DM aside. As it rests, its time adds weight to your share of each ETH
+              funding. Come back when you choose.
+            </p>
+            <p class="plain-rule">No lock-up. No exit fee. Your earned ETH stays yours.</p>
+            <a class="subtle-link" href="#how">Understand it in three steps ↗</a>
+            <p>
+              <a id="buy-token" class="subtle-link" hidden target="_blank" rel="noopener noreferrer"
+                >Get DM on Stockereum ↗</a
+              >
+            </p>
+            <div class="funding-facts">
+              <div><span>DM resting</span><strong id="total-deposited">—</strong></div>
+              <div><span>ETH added to rewards</span><strong id="total-funded">—</strong></div>
+              <div><span>ETH collected</span><strong id="total-claimed">—</strong></div>
+            </div>
+          </div>
+          <div class="participation-form" id="offline-space" aria-label="Your Offline account">
+            <div class="panel-heading">
+              <span>Your offline space</span><span id="network-label">Ethereum</span>
+            </div>
+            <p id="protocol-state" class="protocol-state" role="status">Reading the deployment…</p>
+            <div class="account-overview">
+              <div><span>Resting DM</span><strong id="my-deposited">—</strong></div>
+              <div><span>ETH ready to collect</span><strong id="my-reward">—</strong></div>
+            </div>
+            <div class="tabs" role="tablist" aria-label="Choose an action">
+              <button
+                id="tab-deposit"
+                role="tab"
+                aria-selected="true"
+                aria-controls="action-form"
+                data-tab="deposit"
+              >
+                Go offline</button
+              ><button
+                id="tab-withdraw"
+                role="tab"
+                aria-selected="false"
+                aria-controls="action-form"
+                tabindex="-1"
+                data-tab="withdraw"
+              >
+                Bring tokens back
+              </button>
+            </div>
+            <form id="action-form" role="tabpanel" aria-labelledby="tab-deposit">
+              <div class="field-heading">
+                <label for="amount" id="amount-label">Amount to set aside</label
+                ><button type="button" class="text-button" id="max-amount">Use max</button>
+              </div>
+              <div class="amount-field">
+                <input
+                  id="amount"
+                  name="amount"
+                  inputmode="decimal"
+                  autocomplete="off"
+                  placeholder="0.00"
+                  aria-describedby="available amount-note"
+                  required
+                /><span id="token-symbol">DM</span>
+              </div>
+              <p id="available" class="field-note">Connect to see your balance.</p>
+              <p id="amount-note" class="field-note">
+                Added tokens start their own time. Existing tokens keep theirs.
+              </p>
+              <button class="primary-button full-width" id="submit-action" type="submit">
+                Connect wallet
+              </button>
+            </form>
+            <div class="reward-action">
+              <p id="age-note">Your time starts when your deposit is confirmed.</p>
+              <button id="claim-reward" type="button" disabled>Collect ETH ↗</button>
+            </div>
+            <details class="recipient-option">
+              <summary>Choose another ETH receiving address</summary>
+              <label for="recipient">ETH recipient</label
+              ><input
+                id="recipient"
+                placeholder="Defaults to your connected wallet"
+                autocomplete="off"
+                spellcheck="false"
+              />
+              <p class="field-note">
+                Useful if your smart wallet cannot receive ETH. Your deposit stays yours.
+              </p>
+            </details>
+            <div id="review-home">
+              <section
+                id="transaction-review"
+                class="transaction-review"
+                aria-labelledby="review-title"
+                hidden
+              >
+                <h3 id="review-title">Before you continue</h3>
+                <p id="review-description"></p>
+                <p id="review-detail" class="field-note"></p>
+                <div class="button-row">
+                  <button class="primary-button" id="confirm-transaction">Continue in wallet</button
+                  ><button id="cancel-transaction">Cancel</button>
+                </div>
+              </section>
+              <p
+                id="transaction-status"
+                class="transaction-status"
+                role="status"
+                aria-live="polite"
+              ></p>
+              <a
+                id="transaction-link"
+                class="subtle-link"
+                target="_blank"
+                rel="noopener noreferrer"
+                hidden
+                >View transaction ↗</a
+              >
+            </div>
+            <p class="signature-note">
+              Review every transaction in your wallet. DM never asks for a private key.
+            </p>
+          </div>
+        </section>
+        <section class="how-section section" id="how" aria-labelledby="how-title">
+          <div class="section-heading">
+            <h2 id="how-title">A pause, in three steps.</h2>
+            <p>Everything you need to know before you begin.</p>
+          </div>
+          <ol class="steps">
+            <li>
+              <span class="step-number">01</span>
+              <h3>Set a little aside.</h3>
+              <p>
+                Connect your wallet and choose how much DM to put offline. Approve that amount, then
+                confirm your deposit.
+              </p>
+            </li>
+            <li>
+              <span class="step-number">02</span>
+              <h3>Give it time.</h3>
+              <p>
+                Your weight is the sum of each deposited token’s time offline. Each ETH funding is
+                shared using everyone’s weight at that moment.
+              </p>
+            </li>
+            <li>
+              <span class="step-number">03</span>
+              <h3>Return on your terms.</h3>
+              <p>
+                Collect ETH without disturbing your time. Take back some or all of your DM whenever
+                you want. No deadline. No exit fee.
+              </p>
+            </li>
+          </ol>
+          <p class="how-footnote">
+            Rewards come from actual funding, not from the passage of time alone. No funding means
+            no new ETH rewards.
+          </p>
+        </section>
+        <section
+          class="leaderboard-section section"
+          id="leaderboard"
+          aria-labelledby="leaderboard-title"
+        >
+          <div class="section-heading">
+            <h2 id="leaderboard-title">Time leaves a trace.</h2>
+            <p>Offline rewards, in the open.</p>
+          </div>
+          <div class="table-toolbar">
+            <span>Ranked by total ETH earned: collected + ready to collect.</span
+            ><button id="refresh-leaderboard" class="text-button">Refresh ↻</button>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <caption class="sr-only">
+                Offline ETH rewards leaderboard
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Place</th>
+                  <th scope="col">Wallet</th>
+                  <th scope="col">Resting DM</th>
+                  <th scope="col">Total ETH earned</th>
+                  <th scope="col">ETH collected</th>
+                </tr>
+              </thead>
+              <tbody id="leaderboard-rows"></tbody>
+            </table>
+          </div>
+          <p id="leaderboard-state" class="empty-state" role="status">
+            The first pause is still ahead. Rewards will appear here after launch and funding.
+          </p>
+          <button id="more-leaderboard" hidden>Show more wallets</button>
+          <p id="my-rank" class="field-note"></p>
+          <p id="leaderboard-block" class="field-note"></p>
+        </section>
+        <section class="idea-section section" id="idea" aria-labelledby="idea-title">
+          <p class="section-caption">A note on why.</p>
+          <h2 id="idea-title">There is a life<br />between the updates.</h2>
+          <div class="idea-prose">
+            <p>
+              The feed has no last page. The market has no closing hour. Somewhere along the way,
+              being connected began to feel like being obliged.
+            </p>
+            <p>
+              Digital minimalism begins with a small act of authorship: choosing when a tool belongs
+              in your life, and when to put it down.
+            </p>
+            <p>
+              DM gives that choice a modest form. A place to set tokens aside, share what is
+              actually funded, and leave without a penalty. A pause that belongs to you.
+            </p>
+            <p class="source-note">
+              Our interpretation is inspired by Vitalik Buterin’s
+              <a
+                href="https://vitalik.eth.limo/general/2026/10/31/digital_minimalism.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                >“Digital minimalism” ↗</a
+              >, published 31 October 2026. DM is independent and is not affiliated with or endorsed
+              by Vitalik Buterin.
+            </p>
+          </div>
+        </section>
+        <section
+          class="transparency-section section"
+          id="transparency"
+          aria-labelledby="transparency-title"
+        >
+          <div class="section-heading">
+            <h2 id="transparency-title">Follow the money.</h2>
+            <p>A public path from trading fees to rewards.</p>
+          </div>
+          <p>
+            At the normal 3% Stockereum trading fee, 1% goes to the platform and 2% to the creator.
+            The creator manually claims their share and sends it into Offline. Only ETH actually
+            received and allocated by the contract becomes a reward.
+          </p>
+          <p class="field-note">
+            The platform’s opening anti-snipe window temporarily charges a higher fee. Creator
+            funding is manual and discretionary; DM does not automatically collect every trade’s
+            fee.
+          </p>
+          <div class="funding-path">
+            <span>Trading activity</span><span aria-hidden="true">→</span
+            ><span>Creator claims fees</span><span aria-hidden="true">→</span
+            ><span>ETH enters Offline</span><span aria-hidden="true">→</span
+            ><span>Time-weighted rewards</span>
+          </div>
+          <div id="funding-records"></div>
+          <p id="funding-state" class="field-note">
+            Funding transactions will be visible here after launch.
+          </p>
+          <details class="contract-details">
+            <summary>Contracts, addresses & source</summary>
+            <div id="contract-addresses"></div>
+            <a
+              data-github
+              href="https://github.com/DigitalMinimalism0/DM-Digital-Minimalism"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Read the source on GitHub ↗</a
+            >
+          </details>
+        </section>
+        <section class="faq-section section" aria-labelledby="faq-title">
+          <h2 id="faq-title">Before you step away.</h2>
+          <div class="faq-list">
+            <details>
+              <summary>Does offline mean I have to disconnect?</summary>
+              <p>
+                No. It describes the state of your deposited tokens. DM does not monitor your screen
+                time, internet connection or other wallets.
+              </p>
+            </details>
+            <details>
+              <summary>Can I take my tokens back whenever I want?</summary>
+              <p>
+                Yes. No fixed term, cooldown, exit fee or penalty. Withdraw some or all of your
+                deposit. Normal Ethereum network fees still apply. Already earned ETH remains
+                claimable.
+              </p>
+            </details>
+            <details>
+              <summary>How does time affect my reward?</summary>
+              <p>
+                100 DM resting for two days has the same weight as 200 DM resting for one day. At
+                each funding, your share equals your token-seconds divided by the token-seconds of
+                all current deposits. Time weight has no multiplier tiers or cap.
+              </p>
+            </details>
+            <details>
+              <summary>What happens when I add or withdraw tokens?</summary>
+              <p>
+                Added tokens start at zero time. A partial withdrawal removes proportional time
+                weight. A full withdrawal removes all active time weight; depositing again starts
+                fresh. Collecting ETH never resets your time.
+              </p>
+            </details>
+            <details>
+              <summary>Are rewards guaranteed?</summary>
+              <p>
+                No. Rewards depend on actual funding and everyone’s weight when it arrives. No new
+                rewards accrue between funding transactions. New deposits cannot receive past
+                funding. Withdrawing before a future funding gives no entitlement to it.
+              </p>
+            </details>
+            <details>
+              <summary>Is there anything I need to keep doing?</summary>
+              <p>
+                No check-ins, renewals or compounding. Your deposit and time remain recorded on
+                Ethereum while you are away. Token prices can still change; smart-contract and
+                network risks remain. Read the paper before depositing.
+              </p>
+            </details>
+          </div>
+        </section>
+        <section class="admin-section section" id="admin" aria-labelledby="admin-title" hidden>
+          <h1 id="admin-title">Project administration.</h1>
+          <p id="admin-status" role="status">Connect the current administrator wallet.</p>
+          <div id="admin-review-home"></div>
+          <div id="admin-controls" hidden>
+            <section class="admin-block">
+              <h2>Launch connection</h2>
+              <p id="binding-status">The token address can only be set once.</p>
+              <form id="bind-form">
+                <label for="token-address">Stockereum token address</label
+                ><input
+                  id="token-address"
+                  placeholder="0x…"
+                  required
+                  autocomplete="off"
+                  spellcheck="false"
+                />
+                <p class="field-note">
+                  Expected: original creator wallet, ETH pair, 3% fee, native Holder Rewards OFF.
+                  Binding is permanent.
+                </p>
+                <button class="primary-button" id="bind-token">Review token binding</button>
+              </form>
+            </section>
+            <section class="admin-block">
+              <h2>Creator fees → ETH rewards</h2>
+              <p>
+                Claim WETH to your wallet, unwrap it to ETH, then fund Offline. Each step needs your
+                signature. Funding requires a deposit with positive time weight.
+              </p>
+              <dl class="admin-balances">
+                <div>
+                  <dt>Unclaimed creator fees</dt>
+                  <dd id="creator-fees">—</dd>
+                </div>
+                <div>
+                  <dt>WETH in your wallet</dt>
+                  <dd id="creator-weth">—</dd>
+                </div>
+                <div>
+                  <dt>ETH in your wallet</dt>
+                  <dd id="creator-eth">—</dd>
+                </div>
+              </dl>
+              <div class="button-row">
+                <button id="claim-fees">1. Claim WETH</button
+                ><button id="unwrap-weth">2. Unwrap WETH</button>
+              </div>
+              <form id="fund-form">
+                <label for="fund-amount">ETH to add to rewards</label
+                ><input id="fund-amount" placeholder="0.0" inputmode="decimal" required /><button
+                  class="primary-button"
+                >
+                  3. Review ETH funding
+                </button>
+              </form>
+              <p class="field-note" id="orphan-weth-note"></p>
+              <button id="fund-weth" hidden>Convert WETH already sent to Offline</button>
+            </section>
+            <section class="admin-block">
+              <h2>Operational controls</h2>
+              <p>
+                Pausing only stops new deposits. Withdrawals and reward collection stay available.
+              </p>
+              <button id="toggle-pause">Pause new deposits</button>
+              <form id="transfer-form">
+                <label for="next-admin">Propose a new administrator</label
+                ><input id="next-admin" placeholder="0x…" autocomplete="off" required /><button>
+                  Review ownership transfer
+                </button>
+              </form>
+              <p class="field-note">
+                Two-step acceptance required. The original creator retains their Stockereum fee
+                rights.
+              </p>
+            </section>
+          </div>
+          <button id="accept-admin" hidden>Accept administrator role</button>
+        </section>
+      </main>
+      <footer class="site-footer">
+        <div class="footer-top">
+          <p>Keep a little space<br />for the rest of life.</p>
+          <nav aria-label="Footer">
+            <a href="/whitepaper">The paper ↗</a
+            ><a
+              data-github
+              href="https://github.com/DigitalMinimalism0/DM-Digital-Minimalism"
+              target="_blank"
+              rel="noopener noreferrer"
+              >GitHub ↗</a
+            ><a data-twitter hidden target="_blank" rel="noopener noreferrer">X ↗</a
+            ><a href="https://stockereum.com/docs" target="_blank" rel="noopener noreferrer"
+              >Stockereum ↗</a
+            >
+          </nav>
+          <p class="footer-small">
+            Independent. Open source.<br />No analytics. No tracking cookies.<br />Participation
+            carries risk.
+          </p>
+        </div>
+        <a class="footer-identity" href="#home" aria-label="DM, return to top">dm.</a>
+        <div class="footer-bottom">
+          <span>DM · Digital Minimalism</span><span>Your time is your own.</span>
+        </div>
+      </footer>
+    </div>
+    <dialog id="wallet-dialog" aria-labelledby="wallet-title">
+      <h2 id="wallet-title">Choose your wallet.</h2>
+      <p>Connect a wallet you already use. Your keys stay with you.</p>
+      <div id="wallet-options"></div>
+      <p id="wallet-empty" hidden>
+        Open this website in your wallet’s browser, or install an Ethereum browser wallet, then
+        refresh.
+      </p>
+      <button id="close-wallet-dialog">Cancel</button>
+    </dialog>
+  </body>
+</html>

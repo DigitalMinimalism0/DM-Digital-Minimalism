@@ -58,7 +58,7 @@ try {
   assert.ok(Math.abs(initial.width - opening.width) < 2);
   assert.equal(
     await page.locator('body').evaluate((el) => getComputedStyle(el).fontFamily.split(',')[0]),
-    '"Albert Sans"',
+    'Archivo',
   );
   await page.screenshot({ path: join(dir, 'entrance.png') });
   await scroll(0.5);

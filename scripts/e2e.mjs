@@ -155,6 +155,13 @@ try {
   await page.getByRole('button', { name: 'MetaMask', exact: true }).click();
   await page.evaluate((a) => window.testSelect(a), admin);
   await page.waitForFunction(() => !document.getElementById('admin-controls').hidden);
+  await page.evaluate(() => document.fonts.ready);
+  await page.screenshot({ path: join(dir, 'admin-typography.png'), fullPage: true });
+  const adminViewport = page.viewportSize();
+  await page.setViewportSize({ width: 390, height: 844 });
+  assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+  await page.screenshot({ path: join(dir, 'admin-mobile.png') });
+  await page.setViewportSize(adminViewport);
   await page.locator('#token-address').fill(token);
   await page.locator('#bind-token').click();
   await page.locator('#confirm-transaction').click();

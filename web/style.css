@@ -1113,6 +1113,10 @@ dialog p {
   padding: 70px 0 45px;
 }
 /* Native scrolling expands the original, untextured ocean photograph. */
+.portal-enabled {
+  /* Routes animate explicitly; native fragment scrolling must finish before routing. */
+  scroll-behavior: auto;
+}
 .portal-enabled .site-shell {
   max-width: none;
   margin: 0;

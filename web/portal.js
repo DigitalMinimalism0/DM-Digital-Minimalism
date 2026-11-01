@@ -85,8 +85,10 @@ export function initPortal({ admin = false } = {}) {
     lastProgress = -1,
     fullImage,
     observer,
-    opening;
+    opening,
+    routeArrival = false;
   const nativeTimeline = typeof ScrollTimeline === 'function';
+  history.scrollRestoration = 'manual';
   const endScroll = () => Math.max(0, journey.offsetTop + journey.offsetHeight - innerHeight);
   const setHash = (hash, replace = false) => {
     if (location.hash !== '#' + hash)
@@ -115,6 +117,10 @@ export function initPortal({ admin = false } = {}) {
     if (focus) title.focus({ preventScroll: true });
   }
   function syncArrival(inside) {
+    if (!inside && routeArrival) {
+      window.scrollTo({ top: endScroll(), behavior: 'instant' });
+      return;
+    }
     if (arrived === inside) return;
     arrived = inside;
     world.inert = !inside;
@@ -224,12 +230,16 @@ export function initPortal({ admin = false } = {}) {
       return;
     }
     prepareImage();
+    // A direct route wins over inertia from an earlier wheel gesture until the next
+    // scrolling input. Native wheel/touch scrolling itself remains uninterrupted.
+    routeArrival = instant;
     window.scrollTo({
       top: endScroll(),
       behavior: instant || reduced.matches ? 'instant' : 'smooth',
     });
   }
   function leave({ instant = false, focus = false } = {}) {
+    routeArrival = false;
     requestedView = undefined;
     setHash('home');
     window.scrollTo({ top: 0, behavior: instant || reduced.matches ? 'instant' : 'smooth' });
@@ -262,6 +272,8 @@ export function initPortal({ admin = false } = {}) {
     else enter(routes[hash]);
   });
   document.addEventListener('keydown', (event) => {
+    if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(event.key))
+      routeArrival = false;
     if (event.key !== 'Escape' || document.querySelector('dialog[open]') || !arrived) return;
     event.preventDefault();
     if (activeView !== 'offline') {
@@ -270,7 +282,26 @@ export function initPortal({ admin = false } = {}) {
       openView('offline');
     } else leave({ focus: true });
   });
-  window.addEventListener('hashchange', () => routeHash({ instant: true }));
+  for (const event of ['wheel', 'touchstart'])
+    window.addEventListener(
+      event,
+      () => {
+        routeArrival = false;
+      },
+      { passive: true },
+    );
+  window.addEventListener(
+    'scroll',
+    () => {
+      if (routeArrival && Math.abs(scrollY - endScroll()) > 1)
+        window.scrollTo({ top: endScroll(), behavior: 'instant' });
+    },
+    { passive: true },
+  );
+  // Let native fragment positioning finish before restoring our document-scroll entrance.
+  window.addEventListener('hashchange', () =>
+    requestAnimationFrame(() => routeHash({ instant: true })),
+  );
   window.addEventListener('resize', () => {
     const keepInside = arrived;
     cancelAnimationFrame(resizeFrame);

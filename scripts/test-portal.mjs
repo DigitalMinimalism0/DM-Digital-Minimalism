@@ -97,6 +97,15 @@ try {
   await page.goto(origin + '/#offline-space');
   await page.waitForSelector('#world[data-view="offline"]');
   await page.locator('#amount').fill('23');
+  // Direct routing cancels old inertia, but the next real wheel can still leave.
+  await page.locator('#world-content').hover();
+  await page.mouse.wheel(0, -1500);
+  await page.waitForFunction(
+    () => !document.getElementById('world').classList.contains('is-ready'),
+  );
+  await page.goto(origin + '/#offline-space');
+  await page.waitForSelector('#world.is-ready[data-view="offline"]');
+  assert.equal(await page.locator('#amount').inputValue(), '23');
   await page.setViewportSize({ width: 390, height: 844 });
   await settle();
   assert.equal(await page.locator('#amount').inputValue(), '23');

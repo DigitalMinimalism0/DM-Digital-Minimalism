@@ -1,7 +1,7 @@
 @font-face {
-  font-family: 'Albert Sans';
-  src: url('/fonts/albert-sans-latin-variable.woff2') format('woff2');
-  font-weight: 300 600;
+  font-family: 'Manrope';
+  src: url('/fonts/manrope-latin-variable.woff2') format('woff2');
+  font-weight: 200 800;
   font-style: normal;
   font-display: swap;
 }
@@ -14,7 +14,7 @@
   --gutter: clamp(22px, 5vw, 88px);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   color-scheme: dark;
-  font-family: 'Albert Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Manrope', 'Helvetica Neue', Arial, sans-serif;
   font-synthesis: none;
   font-optical-sizing: auto;
 }
@@ -204,10 +204,26 @@ strong {
   padding: 30px 0 50px;
 }
 .hero-meta {
-  display: flex;
-  justify-content: space-between;
-  color: var(--muted);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding: clamp(20px, 4.5vh, 55px) 6% 0;
   font-size: 12px;
+  line-height: 1.5;
+}
+.hero-meta a {
+  display: flex;
+  min-height: 44px;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.hero-meta a:nth-child(2) {
+  justify-self: center;
+}
+.hero-meta a:last-child {
+  justify-self: end;
+}
+.hero-meta a span:last-child {
+  color: #a6a6a6;
 }
 .identity {
   position: relative;
@@ -254,13 +270,17 @@ strong {
 
 .hero-bottom {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 30px;
   align-items: end;
+  padding: 25px 6% 0;
 }
 .hero-bottom h1 {
-  font-size: 28px;
-  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.6;
+  margin: 0;
 }
 .hero-bottom p {
   color: var(--muted);
@@ -271,12 +291,12 @@ strong {
   display: inline-flex;
   justify-content: space-between;
   align-items: center;
-  gap: 50px;
+  gap: 30px;
   justify-self: center;
-  min-height: 52px;
+  min-height: 44px;
   padding: 10px 0;
   border-bottom: 1px solid #888;
-  font-size: 16px;
+  font-size: 12px;
 }
 .primary-link:hover {
   text-decoration: none;
@@ -1116,7 +1136,7 @@ dialog p {
   letter-spacing: -0.04em;
   padding: 70px 0 45px;
 }
-/* The original depth renderer carries the sea's continuous shading and fine print grain. */
+/* Reference: a framed photographic entrance expands into a luminance-based dot screen. */
 .portal-enabled {
   /* Routes animate explicitly; native fragment scrolling must finish before routing. */
   scroll-behavior: auto;
@@ -1134,15 +1154,35 @@ dialog p {
 }
 #portal-landing {
   position: sticky;
-  top: 0;
-  height: 100svh;
+  top: 24px;
+  height: calc(100svh - 48px);
   z-index: 2;
-  padding: 0 var(--gutter);
+  margin: 24px var(--gutter);
+  padding: 0 32px;
+  border: 1px solid var(--line);
   transform-origin: center;
 }
+.portal-enabled .site-header {
+  min-height: 82px;
+  border-bottom: 0;
+}
+.portal-enabled .site-header nav {
+  margin-left: auto;
+}
+.portal-enabled .site-header .wallet-button {
+  border: 0;
+  padding-right: 0;
+}
 .portal-enabled .hero {
-  height: calc(100svh - 100px);
+  height: calc(100% - 82px);
   min-height: 0;
+  padding: 0 0 50px;
+}
+.portal-enabled .hero-bottom h1 {
+  font-size: 12px;
+}
+.portal-enabled .ocean-window {
+  width: clamp(125px, 15.5vw, 240px);
 }
 .portal-enabled .ocean-window {
   opacity: 0;
@@ -1184,38 +1224,30 @@ dialog p {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: grayscale(1) brightness(0.85) contrast(1.05);
+  filter: grayscale(1) brightness(0.9) contrast(1.1);
 }
-#world-depth {
-  display: none;
-}
-.world-backdrop.depth-active {
+#world-halftone {
+  position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  background: transparent;
-}
-.depth-active > img {
-  display: none;
-}
-.depth-active #world-depth {
   display: block;
-  width: 100%;
-  height: 100%;
 }
-.depth-available .world-shade {
-  background: rgb(0 0 0 / 0.16);
+.world[data-renderer='photograph'] .world-backdrop > img {
+  opacity: 1 !important;
 }
 .world-shade {
   position: absolute;
   inset: 0;
-  background: rgb(0 0 0/0.72);
+  background: rgb(0 0 0/0.58);
   pointer-events: none;
 }
 .world-ui {
   position: relative;
   height: 100%;
   visibility: hidden;
+  /* One continuous shade protects functional text without introducing a card. */
+  background: linear-gradient(180deg, rgb(0 0 0 / 0.42), rgb(0 0 0 / 0.18) 70%);
 }
 .world.is-ready .world-ui {
   visibility: visible;
@@ -1334,7 +1366,7 @@ dialog p {
 .world-content .funding-facts span,
 .world-content .field-note,
 .world-content .protocol-state {
-  color: #bdbdbd;
+  color: #d0d0d0;
 }
 .world-content .panel-heading {
   color: #e5e5e5;
@@ -1417,11 +1449,37 @@ dialog p {
     flex-direction: column;
     gap: 0;
     align-items: center;
-    font-size: clamp(48px, 12vw, 90px);
+    font-size: clamp(38px, 10.5vw, 76px);
     line-height: 1.07;
   }
   .portal-enabled .hero {
-    height: calc(100svh - 82px);
+    height: calc(100% - 70px);
+    padding-bottom: 30px;
+  }
+  #portal-landing {
+    top: 12px;
+    height: calc(100svh - 24px);
+    margin: 12px 16px;
+    padding: 0 18px;
+  }
+  .portal-enabled .site-header {
+    min-height: 70px;
+  }
+  .hero-meta {
+    padding: 20px 0 0;
+    gap: 10px;
+  }
+  .hero-bottom {
+    padding-left: 0;
+    padding-right: 0;
+    gap: 12px;
+  }
+  .portal-enabled .hero-bottom .primary-link {
+    font-size: 11px;
+    gap: 15px;
+  }
+  .portal-enabled .ocean-window {
+    width: 116px;
   }
   .world-header {
     min-height: 118px;

@@ -1,10 +1,10 @@
 # DM visual system
 
-Reading this as a redesign for ordinary token holders: quiet, monochrome, spatial branding with familiar product controls. Native HTML/CSS, self-hosted Albert Sans and bundled viem retain the small static-site architecture. Design variance 6/10; motion intensity 6/10 at the scroll entrance and 2/10 in the product; visual density 3/10 on brand surfaces, 5/10 inside the participation form.
+Reading this as a redesign for ordinary token holders, using the user's four supplied images as the visual authority. Native HTML/CSS, self-hosted Manrope and bundled viem retain the small static-site architecture. Design variance 6/10; motion intensity 6/10 at the scroll entrance and 2/10 in the product; visual density 3/10 on brand surfaces, 5/10 inside the participation form.
 
 ## Preserve
 
-Near-black #080808, foreground #f5f5f5, muted text #a1a1a1, panel #101010, rules #303030. The original ocean renderer and its fine, luminance-dependent print grain are restored from the preserved visual version. Its continuous sea shading must remain visible; do not replace it with a screen of bright isolated circles or remove its grain. Distributed navigation, generous negative space and an oversized closing identity retain the existing design’s character. Final logo artwork is pending; digital minimalism is a lowercase typographic placeholder; DM is the uppercase token name.
+Near-black #080808, foreground #f5f5f5, muted text #a1a1a1, panel #101010, rules #303030. Images 1 and 3 define the framed entrance: a thin inset border, distributed short text, large negative space, and light lowercase lettering across a small square ocean photograph. Images 2 and 4 define a visible photographic halftone: separate circular dots on black, varying in radius with the source image's luminance. Use the photographic sea, not the soft procedural 3D water. Desktop spacing is 9 CSS pixels; mobile spacing is 7. Final logo artwork is pending; digital minimalism is a lowercase typographic placeholder; DM is the uppercase token name.
 
 ## Change
 
@@ -12,11 +12,11 @@ Remove terminal syntax, CLI installation and burn ritual. Replace with a visible
 
 ## Typography and shape
 
-Albert Sans 300–600 self-hosted with its OFL license. Body 16px/1.65; supporting labels 12–14px. Large identity lettering uses weight 300 and -0.03em tracking; participation headings also use weight 300, with regular body text and medium control labels. Large identity lettering is a brand graphic, not a functional heading. Square controls and surfaces, no decorative shadows or gradient treatments. Text uses sentence case; financial values preserve exact wallet/contract case where useful.
+Manrope is restored from the supplied original visual reference and self-hosted with its OFL license. Body 16px/1.65; supporting labels 12–14px. Large identity lettering uses weight 300 and -0.03em tracking; participation headings also use weight 300, with regular body text and medium control labels. A quiet 12px introductory heading follows the first reference. Large identity lettering is a brand graphic, not a functional heading. Square controls and surfaces, no decorative shadows. Text uses sentence case; financial values preserve exact wallet/contract case where useful.
 
 ## Motion and accessibility
 
-Native scrolling takes the camera through the original ocean window into the sea, and upward scrolling reverses it. The preserved shader carries the original grain parameters. Water movement stops when the participation form opens. If WebGL is unavailable or lost, the ocean photograph provides the reversible image enlargement fallback. At arrival, the deposit/withdraw form appears directly. Rewards and About are peer views in the same environment. The original form nodes are moved, never recreated, preserving drafts, wallet state and transaction reviews. No intermediate three-action menu. Transparent surfaces and fine rules keep the interface in the same ocean; there is no enclosing black panel or nested form card. Hover and state feedback last 150–250ms; reduced motion skips the camera journey and water motion. No information depends on animation. Keyboard skip link, native controls/dialog/disclosures, visible focus, semantic tab roles with arrow navigation, 44px+ targets, live statuses and readable contrast.
+Native scrolling enlarges the square photograph into a full viewport sea. The photograph changes into the luminance-based dot screen during enlargement; upward scrolling reverses both. Canvas texture is rendered once per image or viewport size, without a continuous render loop. A photograph fallback remains available if 2D canvas is unavailable. At arrival, the deposit/withdraw form appears directly. Rewards and About are peer views in the same environment. The original form nodes are moved, never recreated, preserving drafts, wallet state and transaction reviews. No intermediate three-action menu. Transparent surfaces and fine rules keep the interface in the same sea. A continuous shade protects functional text without an enclosing black panel or nested form card. Hover and state feedback last 150–250ms; reduced motion uses an end-state transition without enlargement. No information depends on animation. Keyboard skip link, native controls/dialog/disclosures, visible focus, semantic tab roles with arrow navigation, 44px+ targets, live statuses and readable contrast.
 
 ## Responsive
 
@@ -24,4 +24,4 @@ Below 760px, participation stacks; process steps become a vertical sequence; pro
 
 ## Assets
 
-Ocean fallback photograph: https://images.unsplash.com/photo-1518837695005-2083093ee35b, local web/images/ocean.jpg. Albert Sans: https://github.com/usted/Albert-Sans, self-hosted under SIL OFL with the license in web/fonts/albert-sans-OFL.txt. No remote analytics, scripts or font requests. Repository cover is native vector typography, not a final logo.
+Ocean photograph: https://images.unsplash.com/photo-1518837695005-2083093ee35b, local web/images/ocean.jpg and ocean-world.jpg. Manrope is self-hosted under SIL OFL with its license in web/fonts/manrope-OFL.txt. Supplied reference images guide the composition and effect; third-party reference logos and copy are not reproduced. No remote analytics, scripts or font requests. Repository cover is native vector typography, not a final logo.

@@ -40,7 +40,7 @@ flowchart LR
 
 ## An interface you can put down
 
-A native scroll entrance restores the original ocean scene and its fine print grain, with a photograph fallback. It opens directly into one integrated participation surface with ordinary forms: deposit, withdraw, collect. Exact-amount approvals, transaction review, a consistent-block rewards leaderboard, funding records and an administrator launch panel. No terminal or end-user CLI. Albert Sans, image and scripts are served locally; no analytics or tracking cookies.
+A framed photographic entrance expands with native scrolling into a sea of luminance-based halftone dots, following the supplied visual references. It opens directly into one integrated participation surface with ordinary forms: deposit, withdraw, collect. Exact-amount approvals, transaction review, a consistent-block rewards leaderboard, funding records and an administrator launch panel. No terminal or end-user CLI. Manrope, image and scripts are served locally; no analytics or tracking cookies.
 
 The project name is **digital minimalism** (lowercase); its token is **DM** (uppercase). The logo is a provisional typographic mark while final brand assets are prepared. The code builds into an honest pre-launch state until a new deployment manifest is published. No legacy deployment is connected.
 
@@ -93,6 +93,6 @@ The administrator can pause **new deposits only** and transfer the role through 
 
 - [Digital minimalism, Vitalik Buterin, 31 October 2026](https://vitalik.eth.limo/general/2026/10/31/digital_minimalism.html).
 - [Stockereum official documentation](https://stockereum.com/docs); [integration verification](docs/STOCKEREUM.md).
-- Albert Sans (active), Manrope and IBM Plex fonts: SIL Open Font License, license files in `web/fonts/`.
+- Manrope (active) and IBM Plex fonts: SIL Open Font License, license files in `web/fonts/`.
 - [Ocean image on Unsplash](https://images.unsplash.com/photo-1518837695005-2083093ee35b), stored locally with monochrome treatment.
 - Code: [MIT](LICENSE). Maintained under [DigitalMinimalism0](https://github.com/DigitalMinimalism0).

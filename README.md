@@ -40,7 +40,7 @@ flowchart LR
 
 ## An interface you can put down
 
-A native scroll entrance restores the original ocean scene and its fine print grain, with a photograph fallback. It opens directly into a dark reading surface with ordinary forms: deposit, withdraw, collect. Texture stays outside the text surface. Exact-amount approvals, transaction review, a consistent-block rewards leaderboard, funding records and an administrator launch panel. No terminal or end-user CLI. Albert Sans, image and scripts are served locally; no analytics or tracking cookies.
+A native scroll entrance expands the ocean photograph into the newer photographic halftone background. The preceding section layout opens directly into a dark reading surface with ordinary forms: deposit, withdraw, collect. Texture stays outside the text surface. Exact-amount approvals, transaction review, a consistent-block rewards leaderboard, funding records and an administrator launch panel. No terminal or end-user CLI. Albert Sans, image and scripts are served locally; no analytics or tracking cookies.
 
 The project name is **digital minimalism** (lowercase); its token is **DM** (uppercase). The logo is a provisional typographic mark while final brand assets are prepared. The code builds into an honest pre-launch state until a new deployment manifest is published. No legacy deployment is connected.
 

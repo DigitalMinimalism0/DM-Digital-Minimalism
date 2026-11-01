@@ -14,6 +14,8 @@ The invariant handler uses three accounts and random deposits, partial withdrawa
 
 Coverage: pre-launch disabled state → wallet-gated admin → one-time CA binding → exact token approval → deposit → administrator creator-fee claim, WETH unwrap and ETH funding → consistent-block leaderboard → ETH collection with age retained → complete principal withdrawal → account change invalidating a review → 390px mobile layout → paper navigation. Screenshots are saved locally; CI uploads them as browser evidence. No mainnet wallet, private key, broadcast or money is used.
 
+The leaderboard is also checked directly below participation. An ETH funding submitted outside the browser must update its ranking snapshot automatically without clicking refresh, while preserving the user's amount draft. Portal checks cover the shared table across navigation and the honest pre-launch empty state.
+
 Use installed Edge on Windows by default; CI uses Chromium. `E2E_BROWSER=chromium` selects the latter. Install it with `pnpm exec playwright-core install chromium` if needed.
 
 ## Real platform integration

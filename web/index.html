@@ -240,12 +240,16 @@
           aria-labelledby="leaderboard-title"
         >
           <div class="section-heading">
-            <h2 id="leaderboard-title">Time leaves a trace.</h2>
-            <p>Offline rewards, in the open.</p>
+            <p class="section-caption">Time leaves a trace.</p>
+            <h2 id="leaderboard-title">Live rewards leaderboard.</h2>
+            <p>Every wallet. Every reward. In the open.</p>
           </div>
           <div class="table-toolbar">
-            <span>Ranked by total ETH earned: collected + ready to collect.</span
-            ><button id="refresh-leaderboard" class="text-button">Refresh ↻</button>
+            <span>Ranked by total ETH earned: collected + ready to collect.</span>
+            <div class="leaderboard-sync">
+              <span id="leaderboard-updated">Live after launch</span
+              ><button id="refresh-leaderboard" class="text-button" disabled>Refresh ↻</button>
+            </div>
           </div>
           <div class="table-scroll">
             <table>

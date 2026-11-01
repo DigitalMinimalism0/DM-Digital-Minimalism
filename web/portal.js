@@ -25,7 +25,10 @@ export function initPortal({ admin = false } = {}) {
   parking.hidden = true;
   parking.id = 'portal-parking';
   const views = {
-    offline: { label: 'Participate', nodes: [document.getElementById('participate')] },
+    offline: {
+      label: 'Participate',
+      nodes: [document.getElementById('participate'), document.getElementById('leaderboard')],
+    },
     rewards: {
       label: 'Rewards & funding',
       nodes: [document.getElementById('leaderboard'), document.getElementById('transparency')],

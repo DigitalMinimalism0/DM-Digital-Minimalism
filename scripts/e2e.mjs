@@ -224,6 +224,22 @@ try {
       document.getElementById('my-reward').textContent !== '—' &&
       document.getElementById('my-reward').textContent !== '0',
   );
+  // The live table is below participation, and external funding updates it without a click.
+  assert.equal(await page.locator('#world-content > #leaderboard').count(), 1);
+  await page.waitForSelector('#leaderboard-block[data-block]');
+  const previousRankingBlock = await page.locator('#leaderboard-block').getAttribute('data-block');
+  await page.locator('#amount').fill('12.5');
+  await write(offline, offlineAbi, 'fund', [], parseEther('0.1'));
+  await page.waitForFunction((previous) => {
+    const block = document.getElementById('leaderboard-block').dataset.block;
+    const earned = document.querySelector('#leaderboard-rows tr td:nth-child(4)')?.textContent;
+    return block && BigInt(block) > BigInt(previous) && Number(earned) > 1;
+  }, previousRankingBlock);
+  assert.equal(await page.locator('#amount').inputValue(), '12.5');
+  assert.match(await page.locator('#leaderboard-updated').textContent(), /Live.*Updated/);
+  await page.locator('#leaderboard').scrollIntoViewIfNeeded();
+  await page.screenshot({ path: join(dir, 'live-leaderboard.png') });
+  console.log('PASS participation leaderboard automatically reflects external ETH funding');
   await page.locator('.world-nav [data-view="rewards"]').click();
   await page.locator('#refresh-leaderboard').click();
   await page.waitForSelector('#leaderboard-rows tr');

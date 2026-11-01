@@ -601,6 +601,40 @@ details[open] summary {
 .table-scroll {
   overflow: auto;
 }
+.leaderboard-sync {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+#leaderboard-updated {
+  color: #bdbdbd;
+  font-size: 12px;
+}
+.leaderboard-section .table-toolbar {
+  flex-wrap: wrap;
+  gap: 8px 24px;
+}
+.world-content > .leaderboard-section {
+  padding-top: 48px;
+}
+.world-content .leaderboard-section .section-heading {
+  margin-bottom: 24px;
+}
+.world-content .leaderboard-section h2 {
+  font-size: 30px;
+  letter-spacing: -0.02em;
+}
+.world-content .leaderboard-section .section-caption {
+  margin-bottom: 12px;
+}
+.world-content .leaderboard-section table {
+  font-size: 14px;
+}
+.world-content .leaderboard-section th {
+  color: #bdbdbd;
+  font-size: 12px;
+}
 table {
   width: 100%;
   border-collapse: collapse;

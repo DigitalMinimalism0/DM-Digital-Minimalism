@@ -114,9 +114,19 @@ try {
   await page.screenshot({ path: join(dir, 'halftone-sea.png') });
   await page.locator('.world-ui').evaluate((el) => el.style.removeProperty('visibility'));
   assert.equal(await page.locator('.wordmark').first().textContent(), 'digital minimalism');
+  assert.ok(
+    await page.evaluate(
+      () =>
+        document.getElementById('participate').nextElementSibling ===
+        document.getElementById('leaderboard'),
+    ),
+  );
+  assert.equal(await page.locator('#refresh-leaderboard').isDisabled(), true);
+  assert.equal(await page.locator('#leaderboard-rows tr').count(), 0);
   await page.locator('#amount').fill('137.5');
   await page.evaluate(() => {
     window.savedOfflineForm = document.getElementById('action-form');
+    window.savedLeaderboard = document.getElementById('leaderboard');
   });
   await page.locator('.world-nav [data-view="rewards"]').click();
   await page.waitForSelector('#world[data-view="rewards"]');
@@ -127,7 +137,16 @@ try {
   assert.ok(
     await page.evaluate(() => window.savedOfflineForm === document.getElementById('action-form')),
   );
+  assert.ok(
+    await page.evaluate(
+      () => window.savedLeaderboard === document.querySelector('#world-content > #leaderboard'),
+    ),
+  );
+  assert.equal(await page.locator('#leaderboard').count(), 1);
   await page.screenshot({ path: join(dir, 'offline-panel.png') });
+  await page.locator('#leaderboard').scrollIntoViewIfNeeded();
+  await page.screenshot({ path: join(dir, 'leaderboard-prelaunch.png') });
+  await page.locator('#world-content').evaluate((el) => (el.scrollTop = 0));
   await page.locator('#world-content').hover();
   await page.mouse.wheel(0, -1500);
   await page.waitForFunction(

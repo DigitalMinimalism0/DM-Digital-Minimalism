@@ -58,6 +58,9 @@ let refreshVersion = 0,
   poolWeth = 0n,
   fundedTotal = 0n;
 let providerHandlers;
+let boardLoading = false,
+  lastBoardBlock,
+  liveRefreshRunning = false;
 const adminPage = /^\/admin(?:\.html)?\/?$/.test(location.pathname) || location.hash === '#admin';
 const short = (a) => `${a.slice(0, 6)}…${a.slice(-4)}`;
 const same = (a, b) => a?.toLowerCase() === b?.toLowerCase();
@@ -552,19 +555,32 @@ async function batchRead(contracts, blockNumber) {
     deployless: cfg.chainId !== 1,
   });
 }
-async function loadLeaderboard() {
-  if (!deployed || token === ZERO) return;
+async function loadLeaderboard({ force = true } = {}) {
+  if (!deployed || token === ZERO) {
+    $('refresh-leaderboard').disabled = true;
+    $('leaderboard-updated').textContent = 'Live after launch';
+    $('leaderboard-state').textContent = !deployed
+      ? 'The leaderboard opens after deployment and token launch. No rewards have been published yet.'
+      : 'Waiting for the token launch. The first deposit will appear here automatically.';
+    return;
+  }
+  if (boardLoading) return;
+  boardLoading = true;
   const version = ++boardVersion;
   $('refresh-leaderboard').disabled = true;
   try {
     const blockNumber = await client.getBlockNumber({ cacheTime: 0 });
+    if (!force && blockNumber === lastBoardBlock) return;
+    $('leaderboard-updated').textContent = 'Updating…';
     const count = Number(await read('participantCount', [], blockNumber));
     let rows = [];
     for (let start = 0; start < count; start += 80) {
       if (version !== boardVersion) return;
-      $('leaderboard-state').hidden = false;
-      $('leaderboard-state').textContent =
-        `Reading ${Math.min(start + 80, count)} of ${count} wallets…`;
+      if (!ranked.length) {
+        $('leaderboard-state').hidden = false;
+        $('leaderboard-state').textContent =
+          `Reading ${Math.min(start + 80, count)} of ${count} wallets…`;
+      }
       const addresses = await batchRead(
         Array.from({ length: Math.min(80, count - start) }, (_, i) => ({
           address: dep.offline,
@@ -594,7 +610,6 @@ async function loadLeaderboard() {
     }
     if (version !== boardVersion) return;
     ranked = rankAccounts(rows);
-    visibleRows = 20;
     if (!count) {
       $('leaderboard-rows').replaceChildren();
       $('leaderboard-state').hidden = false;
@@ -606,14 +621,29 @@ async function loadLeaderboard() {
     renderLeaderboard();
     $('leaderboard-block').textContent =
       `All ${count} participating wallets · Ethereum block ${blockNumber.toLocaleString()} · one consistent snapshot.`;
+    $('leaderboard-block').dataset.block = String(blockNumber);
+    lastBoardBlock = blockNumber;
+    const updatedAt = new Date();
+    $('leaderboard-updated').textContent =
+      `Live · Updated ${updatedAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })} · checks every 12s`;
+    $('leaderboard-updated').title = updatedAt.toISOString();
   } catch {
     if (version === boardVersion) {
+      ranked = [];
+      lastBoardBlock = undefined;
       $('leaderboard-state').hidden = false;
       $('leaderboard-state').textContent =
         'The full leaderboard could not be read. Please refresh. No partial ranking is shown.';
       $('leaderboard-rows').replaceChildren();
+      $('leaderboard-updated').textContent = 'Update unavailable · retrying automatically';
+      $('leaderboard-updated').removeAttribute('title');
+      $('leaderboard-block').textContent = '';
+      delete $('leaderboard-block').dataset.block;
+      $('my-rank').textContent = '';
+      $('more-leaderboard').hidden = true;
     }
   } finally {
+    boardLoading = false;
     if (version === boardVersion) $('refresh-leaderboard').disabled = false;
   }
 }
@@ -853,6 +883,18 @@ identity?.addEventListener('pointerleave', () => {
 paint();
 await refresh();
 await Promise.allSettled([loadLeaderboard(), loadFunding()]);
-setInterval(() => {
-  if (!document.hidden && !busy) refresh().catch(() => {});
-}, 30000);
+async function refreshLiveData() {
+  if (document.hidden || busy || liveRefreshRunning) return;
+  liveRefreshRunning = true;
+  try {
+    await refresh();
+    if (!adminPage && $('leaderboard').getClientRects().length)
+      await loadLeaderboard({ force: false });
+  } finally {
+    liveRefreshRunning = false;
+  }
+}
+setInterval(() => refreshLiveData().catch(() => {}), 12000);
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) refreshLiveData().catch(() => {});
+});

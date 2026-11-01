@@ -42,6 +42,8 @@ flowchart LR
 
 A native scroll entrance expands the ocean photograph into the newer photographic halftone background. The preceding section layout opens directly into a dark reading surface with ordinary forms: deposit, withdraw, collect. Texture stays outside the text surface. Exact-amount approvals, transaction review, a consistent-block rewards leaderboard, funding records and an administrator launch panel. No terminal or end-user CLI. Archivo, image and scripts are served locally; no analytics or tracking cookies.
 
+The live rewards leaderboard sits directly below participation and checks for new chain data every 12 seconds. It shows total ETH earned, collected ETH, deposited DM and the connected wallet's place, with a visible update time. Pre-launch and unavailable data are labelled explicitly.
+
 The project name is **digital minimalism** (lowercase); its token is **DM** (uppercase). The logo is a provisional typographic mark while final brand assets are prepared. The code builds into an honest pre-launch state until a new deployment manifest is published. No legacy deployment is connected.
 
 ## Run locally

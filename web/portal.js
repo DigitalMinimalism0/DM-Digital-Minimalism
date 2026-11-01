@@ -1,4 +1,6 @@
 // One native scroll journey; existing product nodes move between panels without being recreated.
+import { createDepthWorld } from './world-renderer.js';
+
 export function initPortal({ admin = false } = {}) {
   if (admin) return;
   const landingHeader = document.querySelector('.site-header');
@@ -49,7 +51,7 @@ export function initPortal({ admin = false } = {}) {
   world.setAttribute('aria-label', 'digital minimalism participation');
   world.inert = true;
   world.innerHTML = `
-    <div class="world-backdrop" aria-hidden="true"><img src="/images/ocean.jpg" alt="" width="1800" height="1800"></div>
+    <div class="world-backdrop" aria-hidden="true"><img src="/images/ocean.jpg" alt="" width="1800" height="1800"><canvas id="world-depth"></canvas></div>
     <div class="world-shade" aria-hidden="true"></div>
     <div class="world-ui">
       <header class="world-header"><a id="world-brand" class="wordmark" href="#home" aria-label="digital minimalism, return to the entrance">digital minimalism</a>
@@ -86,6 +88,7 @@ export function initPortal({ admin = false } = {}) {
     fullImage,
     observer,
     opening,
+    depthWorld,
     routeArrival = false;
   const nativeTimeline = typeof ScrollTimeline === 'function';
   history.scrollRestoration = 'manual';
@@ -173,6 +176,7 @@ export function initPortal({ admin = false } = {}) {
     landing.style.transform = 'none';
     landing.style.opacity = '1';
     opening = image.getBoundingClientRect();
+    depthWorld?.resize(opening);
     landing.style.removeProperty('transform');
     landing.style.removeProperty('opacity');
     const size = Math.max(innerWidth, innerHeight);
@@ -190,7 +194,19 @@ export function initPortal({ admin = false } = {}) {
       if (!timeline) a.pause();
       animations.push(a);
     };
-    if (reduced.matches) {
+    if (depthWorld) {
+      bind(backdrop, [{ transform: 'none' }, { transform: 'none' }]);
+      if (reduced.matches) {
+        bind(landing, [{ opacity: 1 }, { offset: 0.995, opacity: 1 }, { opacity: 0 }]);
+      } else {
+        bind(landing, [
+          { opacity: 1, transform: 'perspective(900px) translateZ(0px)' },
+          { offset: 0.16, opacity: 1, transform: 'perspective(900px) translateZ(90px)' },
+          { offset: 0.47, opacity: 0, transform: 'perspective(900px) translateZ(720px)' },
+          { opacity: 0, transform: 'perspective(900px) translateZ(780px)' },
+        ]);
+      }
+    } else if (reduced.matches) {
       bind(backdrop, [
         { opacity: 0, transform: 'none' },
         { offset: 0.995, opacity: 0, transform: 'none' },
@@ -209,7 +225,7 @@ export function initPortal({ admin = false } = {}) {
         { opacity: 0, transform: 'scale(1.04)' },
       ]);
     }
-    const reveal = reduced.matches ? 0.995 : 0.8;
+    const reveal = reduced.matches ? 0.995 : depthWorld ? 0.9 : 0.8;
     bind(shade, [{ opacity: 0 }, { offset: 0.45, opacity: 0 }, { opacity: 1 }]);
     bind(ui, [{ opacity: 0 }, { offset: reveal, opacity: 0 }, { opacity: 1 }]);
     observer?.disconnect();
@@ -318,6 +334,19 @@ export function initPortal({ admin = false } = {}) {
       fallbackFrame = requestAnimationFrame(fallbackTick);
   });
   reduced.addEventListener('change', buildEffects);
+  depthWorld = createDepthWorld(document.getElementById('world-depth'), {
+    getOpening: () => image.getBoundingClientRect(),
+    reducedMotion: () => reduced.matches,
+    panelOpen: () => arrived,
+    onUnavailable: () => {
+      depthWorld?.dispose();
+      depthWorld = null;
+      world.dataset.renderer = 'photograph';
+      buildEffects();
+      prepareImage();
+    },
+  });
+  world.dataset.renderer = depthWorld ? 'webgl' : 'photograph';
   buildEffects();
   requestAnimationFrame(() => routeHash({ instant: true }));
 }
